@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: bookfriends
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookfriends
+    username: root
+    password: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+  security:
+    user:
+      name: user
+      password: password
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.boot: DEBUG
+
+server:
+  port: 8080
+
