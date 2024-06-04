@@ -1,18 +1,22 @@
 package com.daney.bookfriends.entity;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import java.util.Date;
-import java.util.Set;
+import org.hibernate.annotations.DynamicInsert;
 
-@Entity
-@DiscriminatorValue("REVIEW")
+import java.sql.Timestamp;
+
 @Getter
 @Setter
-@ToString
-public class Review extends Item {
+@Entity
+@Table(name = "review")
+@DynamicInsert
+public class Review {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "reviewID", nullable = false)
+    private Integer reviewID;
 
     @ManyToOne
     @JoinColumn(name = "userID")
@@ -33,25 +37,18 @@ public class Review extends Item {
     @Column(name = "reviewTitle", length = 500)
     private String reviewTitle;
 
-    @Column(name = "reviewContent", columnDefinition = "TEXT")
+    @Column(name = "reviewContent")
     private String reviewContent;
 
     @Column(name = "reviewScore")
     private Integer reviewScore;
 
-    @Column(name = "registDate", nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date registDate = new Date();
+    @Column(name = "registDate")
+    private Timestamp registDate;
 
     @Column(name = "likeCount")
     private Integer likeCount;
 
     @Column(name = "viewCount")
     private Integer viewCount;
-
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Likey> likeys;
-
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reply> replies;
 }

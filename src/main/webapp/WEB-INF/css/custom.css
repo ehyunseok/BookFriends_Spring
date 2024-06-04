@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=IBM+Plex+Sans+KR&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&display=swap');
+.navbar-brand {
+	font-family: 'Black Han Sans', sans-sefif;
+	font-size: 35px;
+} 
+
+.navbar-nav {
+	font-family: "IBM Plex Sans KR", sans-serif;
+  	font-weight: 500;
+  	font-style: normal;
+}
+
+ h1, h2, h3, h4 {
+	font-family: "IBM Plex Sans KR", sans-serif;
+}
+h5 {
+	font-family: "IBM Plex Sans KR", sans-serif;
+	font-size: 18px;
+}
+body {
+	font-family: "IBM Plex Sans KR", sans-serif;
+}

@@ -1,29 +1,26 @@
 package com.daney.bookfriends.entity;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "file")
 @Getter
 @Setter
-@ToString
+@Entity
+@Table(name = "file")
 public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "fileID")
+    @Column(name = "fileID", nullable = false)
     private Integer fileID;
 
-    @Column(name = "fileName", length = 255, nullable = false)
+    @Column(name = "fileName", nullable = false, length = 255)
     private String fileName;
 
-    @Column(name = "fileOriginName", length = 255, nullable = false)
+    @Column(name = "fileOriginName", nullable = false, length = 255)
     private String fileOriginName;
 
-    @Column(name = "filePath", length = 255, nullable = false)
+    @Column(name = "filePath", nullable = false, length = 255)
     private String filePath;
 
     @ManyToOne

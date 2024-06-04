@@ -1,18 +1,22 @@
 package com.daney.bookfriends.entity;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import java.util.Date;
-import java.util.Set;
+import org.hibernate.annotations.DynamicInsert;
 
-@Entity
-@DiscriminatorValue("REPLY")
+import java.sql.Timestamp;
+
 @Getter
 @Setter
-@ToString
-public class Reply extends Item {
+@Entity
+@Table(name = "reply")
+@DynamicInsert
+public class Reply {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "replyID", nullable = false)
+    private Integer replyID;
 
     @ManyToOne
     @JoinColumn(name = "userID")
@@ -22,27 +26,16 @@ public class Reply extends Item {
     @JoinColumn(name = "postID")
     private Board post;
 
-    @ManyToOne
-    @JoinColumn(name = "reviewID")
-    private Review review;
-
-    @ManyToOne
-    @JoinColumn(name = "recruitID")
-    private Recruit recruit;
-
-    @Column(name = "replyContent", columnDefinition = "TEXT")
+    @Column(name = "replyContent")
     private String replyContent;
 
     @Column(name = "likeCount")
     private Integer likeCount;
 
-    @Column(name = "replyDate", nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date replyDate = new Date();
+    @Column(name = "replyDate")
+    private Timestamp replyDate;
 
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Likey> likeys;
-
-    @OneToMany(mappedBy = "reply", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reply> replies;
+    @ManyToOne
+    @JoinColumn(name = "recruitID")
+    private Recruit recruit;
 }

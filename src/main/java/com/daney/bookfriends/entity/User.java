@@ -1,21 +1,18 @@
 package com.daney.bookfriends.entity;
 
-import com.daney.bookfriends.entity.Reply;
-import com.daney.bookfriends.entity.Board;
-import com.daney.bookfriends.entity.Likey;
-import com.daney.bookfriends.entity.Recruit;
-import com.daney.bookfriends.entity.Review;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import java.util.Set;
+import org.hibernate.annotations.DynamicInsert;
 
-@Entity
-@Table(name = "user")
 @Getter
 @Setter
-@ToString
+@Entity
+@Table(name = "user")
+@DynamicInsert
 public class User {
 
     @Id
@@ -28,27 +25,9 @@ public class User {
     @Column(name = "userEmail", length = 50)
     private String userEmail;
 
-    @Column(name = "userEmailHash", length = 2048)
+    @Column(name = "userEmailHash")
     private String userEmailHash;
 
     @Column(name = "userEmailChecked")
     private Boolean userEmailChecked;
-
-    // Relationships
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Board> boards;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Review> reviews;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Recruit> recruits;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reply> replies;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Likey> likeys;
-
-
 }

@@ -1,18 +1,22 @@
 package com.daney.bookfriends.entity;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import java.util.Date;
-import java.util.Set;
+import org.hibernate.annotations.DynamicInsert;
 
-@Entity
-@DiscriminatorValue("POST")
+import java.sql.Timestamp;
+
 @Getter
 @Setter
-@ToString
-public class Board extends Item {
+@Entity
+@Table(name = "board")
+@DynamicInsert
+public class Board {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "postID", nullable = false)
+    private Integer postID;
 
     @ManyToOne
     @JoinColumn(name = "userID")
@@ -24,7 +28,7 @@ public class Board extends Item {
     @Column(name = "postTitle", length = 50)
     private String postTitle;
 
-    @Column(name = "postContent", columnDefinition = "TEXT")
+    @Column(name = "postContent")
     private String postContent;
 
     @Column(name = "viewCount")
@@ -33,16 +37,6 @@ public class Board extends Item {
     @Column(name = "likeCount")
     private Integer likeCount;
 
-    @Column(name = "postDate", nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date postDate = new Date();
-
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Likey> likeys;
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reply> replies;
-
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<File> files;
+    @Column(name = "postDate")
+    private Timestamp postDate;
 }

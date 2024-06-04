@@ -1,22 +1,21 @@
 package com.daney.bookfriends.entity;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
-@Entity
-@Table(name = "chat")
 @Getter
 @Setter
-@ToString
+@Entity
+@Table(name = "chat")
+@DynamicInsert
 public class Chat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "chatID")
+    @Column(name = "chatID", nullable = false)
     private Integer chatID;
 
     @ManyToOne
@@ -27,14 +26,12 @@ public class Chat {
     @JoinColumn(name = "receiverID")
     private User receiver;
 
-    @Column(name = "message", columnDefinition = "TEXT")
+    @Column(name = "message")
     private String message;
 
-    @Column(name = "chatTime", nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date chatTime = new Date();
+    @Column(name = "chatTime")
+    private Timestamp chatTime;
 
     @Column(name = "chatRead")
-    private Boolean chatRead = false;
+    private Boolean chatRead;
 }
-

@@ -3,32 +3,27 @@ package com.daney.bookfriends.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-@Entity
-@Table(name = "likey")
 @Getter
 @Setter
-@ToString
+@Entity
+@Table(name = "likey")
+@IdClass(LikeyId.class)
 public class Likey {
 
-    @EmbeddedId
-    private LikeyId id;
+    @Id
+    @Column(name = "userID", nullable = false)
+    private String userID;  // User 타입 대신 userID를 직접 사용
 
-    @ManyToOne
-    @MapsId("userID")
-    @JoinColumn(name = "userID")
-    private User user;
+    @Id
+    @Enumerated(EnumType.STRING)
+    @Column(name = "itemType", nullable = false)
+    private ItemType itemType;
+
+    @Id
+    @Column(name = "itemID", nullable = false)
+    private Integer itemID;
 
     @Column(name = "userIP", length = 50)
     private String userIP;
-
-    @ManyToOne
-    @MapsId("itemID")
-    @JoinColumn(name = "itemID", insertable = false, updatable = false)
-    private Item item;
-
-    @ManyToOne
-    @JoinColumn(name = "recruitID", insertable = false, updatable = false)
-    private Recruit recruit;
 }

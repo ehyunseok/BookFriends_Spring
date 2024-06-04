@@ -1,42 +1,39 @@
 package com.daney.bookfriends.entity;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import java.util.Date;
-import java.util.Set;
+import org.hibernate.annotations.DynamicInsert;
 
-@Entity
-@DiscriminatorValue("RECRUIT")
+import java.sql.Timestamp;
+
 @Getter
 @Setter
-@ToString
-public class Recruit extends Item {
+@Entity
+@Table(name = "recruit")
+@DynamicInsert
+public class Recruit {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "recruitID", nullable = false)
+    private Integer recruitID;
 
     @ManyToOne
     @JoinColumn(name = "userID")
     private User user;
 
-    @Column(name = "recruitStatus", length = 20, nullable = false)
-    private String recruitStatus = "모집중";
+    @Column(name = "recruitStatus", length = 20)
+    private String recruitStatus;
 
     @Column(name = "recruitTitle", length = 500)
     private String recruitTitle;
 
-    @Column(name = "recruitContent", columnDefinition = "TEXT")
+    @Column(name = "recruitContent")
     private String recruitContent;
 
-    @Column(name = "registDate", nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date registDate = new Date();
+    @Column(name = "registDate")
+    private Timestamp registDate;
 
     @Column(name = "viewCount")
     private Integer viewCount;
-
-    @OneToMany(mappedBy = "recruit", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Reply> replies;
-
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Likey> likeys;
 }

@@ -12,28 +12,23 @@ import java.util.Objects;
 @Setter
 @ToString
 public class LikeyId implements Serializable {
+    /* jpa 엔티티 클래스에서 복합키를 정의하기 위해 사용되는 클래스!
+     * jpa에서 두 개 이상의 컬럼을 기본키로 사용해야할 때  @IdClass나 @EmbeddedId를 사용하여 정의한다.
+     *  */
 
-    @Column(name = "userID")
     private String userID;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "itemType")
     private ItemType itemType;
-
-    @Column(name = "itemID")
     private Integer itemID;
 
-    // Default constructor
-    public LikeyId() {
-    }
+    public LikeyId() {}
 
-    // Parameterized constructor
     public LikeyId(String userID, ItemType itemType, Integer itemID) {
         this.userID = userID;
         this.itemType = itemType;
         this.itemID = itemID;
     }
 
+    // equals implementation
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,8 +39,10 @@ public class LikeyId implements Serializable {
                 Objects.equals(itemID, likeyId.itemID);
     }
 
+    // 해시코드
     @Override
     public int hashCode() {
         return Objects.hash(userID, itemType, itemID);
     }
+
 }
