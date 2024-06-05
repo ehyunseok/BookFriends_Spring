@@ -19,8 +19,8 @@ public class Reply {
     private Integer replyID;
 
     @ManyToOne
-    @JoinColumn(name = "userID")
-    private User user;
+    @JoinColumn(name = "memberID")
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "postID")

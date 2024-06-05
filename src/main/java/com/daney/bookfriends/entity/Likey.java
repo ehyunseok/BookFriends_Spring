@@ -12,8 +12,8 @@ import lombok.Setter;
 public class Likey {
 
     @Id
-    @Column(name = "userID", nullable = false)
-    private String userID;  // User 타입 대신 userID를 직접 사용
+    @Column(name = "memberID", nullable = false)
+    private String memberID;  // member 타입 대신 memberID를 직접 사용
 
     @Id
     @Enumerated(EnumType.STRING)
@@ -24,6 +24,6 @@ public class Likey {
     @Column(name = "itemID", nullable = false)
     private Integer itemID;
 
-    @Column(name = "userIP", length = 50)
-    private String userIP;
+    @Column(name = "memberIP", length = 50)
+    private String memberIP;
 }

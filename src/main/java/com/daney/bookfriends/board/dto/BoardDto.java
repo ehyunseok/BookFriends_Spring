@@ -9,5 +9,5 @@ public class BoardDto {
     private String postTitle;
     private String postContent;
     private int likeCount;
-    private String userID;
+    private String memberID;
 }

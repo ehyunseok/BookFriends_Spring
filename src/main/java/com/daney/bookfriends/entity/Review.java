@@ -19,8 +19,8 @@ public class Review {
     private Integer reviewID;
 
     @ManyToOne
-    @JoinColumn(name = "userID")
-    private User user;
+    @JoinColumn(name = "memberID")
+    private Member member;
 
     @Column(name = "bookName", length = 500)
     private String bookName;

@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
-    //String userID = (String) session.getAttribute("userID");
-    String userID = "sdf";
     String currentURL = request.getRequestURI();
 %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -37,29 +36,34 @@
             </li>
 
             <!-- 로그인 상태 -->
-            <% if(userID != null){ %>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown">
-                    회원관리
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdown">
-                    <a class="dropdown-item" style="color: green;"><b>석이현</b> 님 환영합니다.</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/user/logout">로그아웃</a>
-                </div>
-            </li>
-            <% } else { %>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown">
-                    회원관리
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/user/login">로그인</a>
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/user/join">회원가입</a>
-                </div>
-            </li>
-            <% } %>
+            <c:choose>
+                <c:when test="${not empty sessionScope.SPRING_SECURITY_CONTEXT}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown">
+                            회원관리
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown">
+                            <a class="dropdown-item" style="color: green;">
+                                <b><c:out value="${pageContext.request.userPrincipal.name}"/></b> 님 환영합니다.
+                            </a>
+                            <form action="${pageContext.request.contextPath}/member/logout" method="post">
+                                <button type="submit" class="dropdown-item">로그아웃</button>
+                            </form>
+                        </div>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="dropdown" data-toggle="dropdown">
+                            회원관리
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown">
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/member/login">로그인</a>
+                            <a class="dropdown-item" href="${pageContext.request.contextPath}/member/join">회원가입</a>
+                        </div>
+                    </li>
+                </c:otherwise>
+            </c:choose>
         </ul>
     </div>
 </nav>
-
-

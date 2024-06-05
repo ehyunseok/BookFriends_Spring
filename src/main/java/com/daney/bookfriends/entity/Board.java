@@ -19,8 +19,8 @@ public class Board {
     private Integer postID;
 
     @ManyToOne
-    @JoinColumn(name = "userID")
-    private User user;
+    @JoinColumn(name = "memberID")
+    private Member member;
 
     @Column(name = "postCategory", length = 20)
     private String postCategory;

@@ -8,7 +8,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
+      naming: #네이밍 전략을 수동으로 설정
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
         show_sql: true
@@ -21,7 +23,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: yhdaneys@gmail.com
-    password: ${MAIL_PASSWORD}
+    password: ${mail.password}
     properties:
       mail:
         smtp:
@@ -38,6 +40,8 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
     org.springframework.boot: DEBUG
+    org.springframework: DEBUG
+    com.daney.bookfriends: DEBUG
 
 server:
   servlet:

@@ -13,7 +13,7 @@ public class JwtService {
     private String secretKey = "secretKey"; // 비밀 키
 
     // 토큰 생성
-    public String generateToken(String userEmail) {
+    public String generateToken(String memberEmail) {
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
         long expMillis = nowMillis + 3600000; // 토큰 만료 시간 (예: 1시간 후)
@@ -21,7 +21,7 @@ public class JwtService {
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
-                .withSubject(userEmail)
+                .withSubject(memberEmail)
                 .withIssuedAt(now)
                 .withExpiresAt(exp)
                 .sign(algorithm);

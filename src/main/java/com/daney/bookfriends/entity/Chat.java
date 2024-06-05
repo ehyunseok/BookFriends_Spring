@@ -20,11 +20,11 @@ public class Chat {
 
     @ManyToOne
     @JoinColumn(name = "senderID")
-    private User sender;
+    private Member sender;
 
     @ManyToOne
     @JoinColumn(name = "receiverID")
-    private User receiver;
+    private Member receiver;
 
     @Column(name = "message")
     private String message;

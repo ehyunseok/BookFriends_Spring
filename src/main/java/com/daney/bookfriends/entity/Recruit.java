@@ -19,8 +19,8 @@ public class Recruit {
     private Integer recruitID;
 
     @ManyToOne
-    @JoinColumn(name = "userID")
-    private User user;
+    @JoinColumn(name = "memberID")
+    private Member member;
 
     @Column(name = "recruitStatus", length = 20)
     private String recruitStatus;

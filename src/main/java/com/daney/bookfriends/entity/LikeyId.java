@@ -16,14 +16,14 @@ public class LikeyId implements Serializable {
      * jpa에서 두 개 이상의 컬럼을 기본키로 사용해야할 때  @IdClass나 @EmbeddedId를 사용하여 정의한다.
      *  */
 
-    private String userID;
+    private String memberID;
     private ItemType itemType;
     private Integer itemID;
 
     public LikeyId() {}
 
-    public LikeyId(String userID, ItemType itemType, Integer itemID) {
-        this.userID = userID;
+    public LikeyId(String memberID, ItemType itemType, Integer itemID) {
+        this.memberID = memberID;
         this.itemType = itemType;
         this.itemID = itemID;
     }
@@ -34,7 +34,7 @@ public class LikeyId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LikeyId likeyId = (LikeyId) o;
-        return Objects.equals(userID, likeyId.userID) &&
+        return Objects.equals(memberID, likeyId.memberID) &&
                 itemType == likeyId.itemType &&
                 Objects.equals(itemID, likeyId.itemID);
     }
@@ -42,7 +42,7 @@ public class LikeyId implements Serializable {
     // 해시코드
     @Override
     public int hashCode() {
-        return Objects.hash(userID, itemType, itemID);
+        return Objects.hash(memberID, itemType, itemID);
     }
 
 }
