@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+## email-config.properties
+/src/main/resources/email-config.properties
