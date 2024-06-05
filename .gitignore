@@ -35,7 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-
-# .gitignore 파일의 내용
-application.yml

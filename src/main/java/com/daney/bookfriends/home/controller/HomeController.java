@@ -25,7 +25,7 @@ public class HomeController {
     private ReviewService reviewService;
 
     @GetMapping("/bookfriends")
-    public String home(HttpSession session, Model model) {
+    public String index(HttpSession session, Model model) {
 //        String userID = (String) session.getAttribute("userID");
 //        if (userID == null) {
 //            return "redirect:/user/login"; // 로그인 페이지로 리다이렉트
@@ -36,12 +36,12 @@ public class HomeController {
 //            return "redirect:/user/email-confirm"; // 이메일 인증 페이지로 리다이렉트
 //        }
 
-        List<BoardDto> top5Boards = boardService.getTop5Boards();
-        List<ReviewDto> top5Reviews = reviewService.getTop5Reviews();
+//        List<BoardDto> top5Boards = boardService.getTop5Boards();
+//        List<ReviewDto> top5Reviews = reviewService.getTop5Reviews();
 
 //        model.addAttribute("userID", userID);
-        model.addAttribute("top5Boards", top5Boards);
-        model.addAttribute("top5Reviews", top5Reviews);
+//        model.addAttribute("top5Boards", top5Boards);
+//        model.addAttribute("top5Reviews", top5Reviews);
 
         return "index";
     }

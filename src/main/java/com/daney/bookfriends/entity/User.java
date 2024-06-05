@@ -19,14 +19,11 @@ public class User {
     @Column(name = "userID", length = 20, nullable = false)
     private String userID;
 
-    @Column(name = "userPassword", length = 64)
+    @Column(name = "userPassword", length = 64, nullable = false)
     private String userPassword;
 
-    @Column(name = "userEmail", length = 50)
+    @Column(name = "userEmail", length = 50, nullable = false)
     private String userEmail;
-
-    @Column(name = "userEmailHash")
-    private String userEmailHash;
 
     @Column(name = "userEmailChecked")
     private Boolean userEmailChecked;
