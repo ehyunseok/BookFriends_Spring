@@ -38,3 +38,4 @@ out/
 
 ## email-config.properties
 /src/main/resources/email-config.properties
+/src/main/resources/application.yml
