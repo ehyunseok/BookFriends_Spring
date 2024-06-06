@@ -1,9 +1,11 @@
 package com.daney.bookfriends.Member.controller;
 
+import com.daney.bookfriends.Member.service.EmailService;
 import com.daney.bookfriends.jwts.JwtService;
 import com.daney.bookfriends.Member.dto.MemberDto;
 import com.daney.bookfriends.Member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ public class MemberController {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private EmailService emailService;
 
 
 // 회원가입
@@ -40,42 +44,52 @@ public class MemberController {
         return memberService.isMemberIDDuplicate(memberID);
     }
 
+    // 이메일로 인증 코드 발송 요청 처리
+    @PostMapping("/sendVerificationCode")
+    @ResponseBody
+    public String sendVerificationCode(@RequestParam String email){
+        emailService.sendVerificationCode(email);
+        return "Verification code sent";
+    }
+
+    // 인증 코드 확인 요청 처리
+    @PostMapping("/verifyCode")
+    @ResponseBody
+    public boolean verifyCode(@RequestParam String email, @RequestParam String code, HttpSession session){
+        boolean isValid = emailService.verifyCode(email, code);
+        if(isValid){
+            session.setAttribute("emailVerified", true);    // 이메일 인증 성공 시 세션에 저장
+        } else{
+            session.removeAttribute("emailVerified");
+        }
+
+        return isValid;
+    }
+
+
     // 회원가입 요청 처리
     @PostMapping("/join")
-    public String registerMember(@ModelAttribute MemberDto memberDto, Model model){
-        if(!memberService.isMemberIDDuplicate(memberDto.getMemberID())){
-            boolean registered = memberService.registerMember(memberDto);
-            if(registered){
-                return "redirect:/"; // 가입이 완료되면 메인 페이지로 이동
+    public String registerMember(@ModelAttribute MemberDto memberDto, Model model, HttpSession session){
+        Boolean emailVerified = (Boolean) session.getAttribute("emailVerified");
+        if(emailVerified != null && emailVerified) {
+            if (!memberService.isMemberIDDuplicate(memberDto.getMemberID())) {
+                memberDto.setMemberEmailChecked(true);
+                boolean registered = memberService.registerMember(memberDto);
+                if (registered) {
+                    return "member/login"; // 가입이 완료되면 로그인 페이지로 이동
+                }
             }
+            model.addAttribute("error", "사용할 수 없는 아이디이거나 기타 오류가 발생했습니다.");
+        } else {
+            model.addAttribute("error","이메일 인증 코드가 올바르지 않거나 만료되었습니다.");
         }
-        model.addAttribute("error", "사용할 수 없는 아이디이거나 기타 오류가 발생했습니다.");
         return "member/join";  // 오류 시 회원가입 페이지 유지
     }
 
-    //이메일 인증 링크 처리
-    @GetMapping("/confirm")
-    public void confirmRegistration(@RequestParam("token") String token, HttpServletResponse response) throws IOException {
-        if(jwtService.validateToken(token)){
-            String memberEmail = jwtService.extractEmail(token);
-            // 사용자 이메일 인증 처리 로직
-            boolean verified = memberService.verifyMemberEmail(memberEmail);
-            if(verified){
-                response.getWriter().write("<script>alert('이메일 인증이 완료되었습니다.'); location.href='/';</script>");
 
-
-            } else {
-                response.getWriter().write("<script>alert('이메일 인증을 실패했습니다.'); location.href='/';</script>");
-            }
-        } else {
-            response.getWriter().write("<script>alert('토큰이 유효하지 않거나 만료되었습니다.'); location.href='/member/login';</script>");
-        }
-        
-    }
-
-    //인증메일 다시 보내기
-    @GetMapping String resendConfirmation(Model model){
-
+    // 인증메일 다시 보내기
+    @GetMapping("/resendConfirmation")
+    public String resendConfirmation(Model model){
         model.addAttribute("message", "인증메일이 다시 전송되었습니다.");
         model.addAttribute("redirectUrl", "/"); // 메일 재전송 후 메인 페이지로 이동
         return "confirmationResult"; // 결과 페이지

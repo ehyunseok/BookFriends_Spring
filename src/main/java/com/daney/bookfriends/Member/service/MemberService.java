@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
 
@@ -48,6 +51,9 @@ public class MemberService {
         return isDuplicate; // 중복 되면 true, 아니면 false
     }
 
+
+
+
     //회원 가입 처리 & 회원 정보 저장
     @Transactional
     public boolean registerMember(MemberDto memberDto){
@@ -69,11 +75,9 @@ public class MemberService {
 
             // 사용자 정보 저장
             Member member = modelMapper.map(memberDto, Member.class);
-            member.setMemberEmailChecked(false); // 이메일 인증 상태 기본값은 false
+            member.setMemberEmailChecked(true);
             memberRepository.save(member);
             log.info("New member registered: {}", memberDto.getMemberID());
-
-            emailService.sendRegistrationConfirmationEmailHtml(member.getMemberEmail());   // 인증 이메일 전송
 
             // 자동 로그인 처리
             autoLogin(memberDto.getMemberID());
@@ -120,7 +124,7 @@ public class MemberService {
     //이메일 재전송 로직
     public void resendConfirmationEmail(String memberEmail) {
         String token = jwtService.generateToken(memberEmail);
-        emailService.sendRegistrationConfirmationEmailHtml(memberEmail);
+        //emailService.sendRegistrationConfirmationEmailHtml(memberEmail);
     }
 
 //member 수정
