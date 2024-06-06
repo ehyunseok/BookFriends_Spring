@@ -34,8 +34,25 @@
         </div>
         <div class="form-group">
             <label>이메일</label>
-            <input type="email" name="memberEmail" class="form-control" placeholder="id@mail.com" id="memberEmail">
+            <div class="input-group mb-3">
+                <input type="email" name="memberEmail" class="form-control" placeholder="id@mail.com" id="memberEmail">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="sendCodeBtn">인증코드 받기</button>
+                </div>
+            </div>
+            <div class="text-left" id="authCodeFeedback"></div>
         </div>
+        <!-- 인증 영역, 기본적으로 숨김! -->
+        <div class="form-group" id="verificationSection" style="display: none;">
+            <label for="verificationCode">인증코드</label>
+            <div class="input-group mb-3">
+                <input type="text" name="authCode" class="form-control" id="verificationCode">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="verifyCodeBtn">인증코드 확인</button>
+                </div>
+            </div>
+        </div>
+
         <button type="submit" class="btn btn-primary btn-block">회원가입</button>
     </form>
     <div class="mt-3">
