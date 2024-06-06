@@ -30,6 +30,7 @@ BookFriends_Servlet 프로젝트는 JSP와 Servlet만을 사용하여 개발되�
 - **Frontend**: JSP, JavaScript, CSS
 - **Database**: MySQL
 - **Build Tool**: Gradle
+- **IDE**: IntelliJ IDEA
 
 ## 주요 기능
 1. **회원 관리**
