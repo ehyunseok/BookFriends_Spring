@@ -14,25 +14,25 @@
                 <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/") ? " font-weight-bold" : "" %>"
                 href="${pageContext.request.contextPath}/">메인</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/review/bookReview") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/review/bookReview") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/review/bookReview">서평</a>
+            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/review") ? " active" : "" %>">
+                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/review") ? " font-weight-bold" : "" %>"
+                href="${pageContext.request.contextPath}/review">서평</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/board/board") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/board/board") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/board/board">자유게시판</a>
+            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/board") ? " active" : "" %>">
+                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/board") ? " font-weight-bold" : "" %>"
+                href="${pageContext.request.contextPath}/board">자유게시판</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/recruit/recruit") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/recruit/recruit") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/recruit/recruit">독서모임</a>
+            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/recruit") ? " active" : "" %>">
+                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/recruit") ? " font-weight-bold" : "" %>"
+                href="${pageContext.request.contextPath}/recruit">독서모임</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/market/market") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/market/market") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/market/market">중고장터</a>
+            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/market") ? " active" : "" %>">
+                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/market") ? " font-weight-bold" : "" %>"
+                href="${pageContext.request.contextPath}/market">중고장터</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/chat/chat") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/chat/chat") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/chat/chat">채팅</a>
+            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/chat") ? " active" : "" %>">
+                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/chat") ? " font-weight-bold" : "" %>"
+                href="${pageContext.request.contextPath}/chat">채팅</a>
             </li>
 
             <!-- 로그인 상태 -->

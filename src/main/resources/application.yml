@@ -35,6 +35,11 @@ spring:
       enable: true
     livereload:
       enable: true
+  web:
+    resources:
+      static-locations: file:///C:/BookFriends/uploads/
+
+# 로그
 logging:
   level:
     org.hibernate.SQL: debug
@@ -43,7 +48,12 @@ logging:
     org.springframework: DEBUG
     com.daney.bookfriends: DEBUG
 
+# 서버
 server:
   servlet:
     context-path: /bookfriends
   port: 8080
+
+#file 업로드 경로
+file:
+  upload-dir: c:/BookFriends/uploads
