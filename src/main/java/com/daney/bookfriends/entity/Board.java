@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,21 +23,24 @@ public class Board {
     @JoinColumn(name = "memberID")
     private Member member;
 
-    @Column(name = "postCategory", length = 20)
+    @Column(name = "postCategory")
     private String postCategory;
 
-    @Column(name = "postTitle", length = 50)
+    @Column(name = "postTitle")
     private String postTitle;
 
     @Column(name = "postContent")
     private String postContent;
 
-    @Column(name = "viewCount")
+    @Column(name = "viewCount", columnDefinition = "INTEGER DEFAULT 0")
     private Integer viewCount;
 
-    @Column(name = "likeCount")
+    @Column(name = "likeCount", columnDefinition = "INTEGER DEFAULT 0")
     private Integer likeCount;
 
     @Column(name = "postDate")
     private Timestamp postDate;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replies;
 }

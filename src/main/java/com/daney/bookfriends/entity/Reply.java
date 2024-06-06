@@ -24,7 +24,7 @@ public class Reply {
 
     @ManyToOne
     @JoinColumn(name = "postID")
-    private Board post;
+    private Board board;
 
     @Column(name = "replyContent")
     private String replyContent;
