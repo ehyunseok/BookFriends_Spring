@@ -5,7 +5,6 @@
     <!-- header.jsp -->
     <%@ include file="../commons/header.jsp" %>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/memberJoinLogin.css">
-
 </head>
 
 <body data-context-path="${pageContext.request.contextPath}">
@@ -18,6 +17,7 @@
 <!-- container -->
 <section class="container mt-5" style="max-width: 560px">
     <form method="post" action="${pageContext.request.contextPath}/member/join">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div class="form-group">
             <label>아이디</label>
             <div class="input-group mb-3">

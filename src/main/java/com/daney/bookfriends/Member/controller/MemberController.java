@@ -47,16 +47,16 @@ public class MemberController {
     // 이메일로 인증 코드 발송 요청 처리
     @PostMapping("/sendVerificationCode")
     @ResponseBody
-    public String sendVerificationCode(@RequestParam String email){
-        emailService.sendVerificationCode(email);
+    public String sendVerificationCode(@RequestParam String memberEmail){
+        emailService.sendVerificationCode(memberEmail);
         return "Verification code sent";
     }
 
     // 인증 코드 확인 요청 처리
     @PostMapping("/verifyCode")
     @ResponseBody
-    public boolean verifyCode(@RequestParam String email, @RequestParam String code, HttpSession session){
-        boolean isValid = emailService.verifyCode(email, code);
+    public boolean verifyCode(@RequestParam String memberEmail, @RequestParam String authCode, HttpSession session){
+        boolean isValid = emailService.verifyCode(memberEmail, authCode);
         if(isValid){
             session.setAttribute("emailVerified", true);    // 이메일 인증 성공 시 세션에 저장
         } else{

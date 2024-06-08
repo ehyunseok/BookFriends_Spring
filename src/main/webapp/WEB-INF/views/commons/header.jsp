@@ -8,3 +8,7 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 <!-- Custom CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/custom.css">
+
+<!-- Add CSRF meta tags -->
+<meta name="_csrf" content="${_csrf.token}">
+<meta name="_csrf_header" content="${_csrf.headerName}">

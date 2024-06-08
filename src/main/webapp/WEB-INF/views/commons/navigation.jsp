@@ -12,27 +12,27 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/") ? " active" : "" %>">
                 <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/">메인</a>
+                   href="${pageContext.request.contextPath}/">메인</a>
             </li>
             <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/review") ? " active" : "" %>">
                 <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/review") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/review">서평</a>
+                   href="${pageContext.request.contextPath}/review">서평</a>
             </li>
             <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/board") ? " active" : "" %>">
                 <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/board") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/board">자유게시판</a>
+                   href="${pageContext.request.contextPath}/board">자유게시판</a>
             </li>
             <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/recruit") ? " active" : "" %>">
                 <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/recruit") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/recruit">독서모임</a>
+                   href="${pageContext.request.contextPath}/recruit">독서모임</a>
             </li>
             <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/market") ? " active" : "" %>">
                 <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/market") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/market">중고장터</a>
+                   href="${pageContext.request.contextPath}/market">중고장터</a>
             </li>
             <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/chat") ? " active" : "" %>">
                 <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/chat") ? " font-weight-bold" : "" %>"
-                href="${pageContext.request.contextPath}/chat">채팅</a>
+                   href="${pageContext.request.contextPath}/chat">채팅</a>
             </li>
 
             <!-- 로그인 상태 -->
@@ -47,6 +47,7 @@
                                 <b><c:out value="${pageContext.request.userPrincipal.name}"/></b> 님 환영합니다.
                             </a>
                             <form action="${pageContext.request.contextPath}/member/logout" method="post">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                 <button type="submit" class="dropdown-item">로그아웃</button>
                             </form>
                         </div>

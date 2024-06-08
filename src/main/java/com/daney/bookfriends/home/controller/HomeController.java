@@ -20,25 +20,10 @@ public class HomeController {
     @Autowired
     private ReviewService reviewService;
 
-    @GetMapping("/bookfriends")
+    @GetMapping("/")
     public String index(HttpSession session, Model model) {
-//        String memberID = (String) session.getAttribute("memberID");
-//        if (memberID == null) {
-//            return "redirect:/member/login"; // 로그인 페이지로 리다이렉트
-//        }
-//
-//        // 이메일 인증 상태 확인
-//        if (!memberService.isMemberEmailChecked(memberID)) {
-//            return "redirect:/member/email-confirm"; // 이메일 인증 페이지로 리다이렉트
-//        }
-
-//        List<BoardDto> top5Boards = boardService.getTop5Boards();
-//        List<ReviewDto> top5Reviews = reviewService.getTop5Reviews();
-
-//        model.addAttribute("memberID", memberID);
-//        model.addAttribute("top5Boards", top5Boards);
-//        model.addAttribute("top5Reviews", top5Reviews);
-
         return "index";
     }
+
+
 }

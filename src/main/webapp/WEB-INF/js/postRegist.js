@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
+    var contextPath = document.querySelector('body').getAttribute('data-context-path');
+    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
     // Initialize Quill editor
     const quill = new Quill('#editor', {
@@ -37,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 processData: false,
                 contentType: false,
                 dataType: 'json',
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                },
                 success: function (response) {
                     const imageUrl = contextPath +  '/uploads/' + response.fileName;
                     const range = quill.getSelection();
@@ -51,4 +57,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Add image handler to toolbar
     quill.getModule('toolbar').addHandler('image', selectLocalImage);
+
+    // 폼 제출할 때 해당 영역이 비어 있으면 제출 못하게 하기
+    $('form').submit(function (event) {
+        var postCategory = $('#postCategory').val();
+        var postTitle = $('#postTitle').val();
+        var quill_html = $('#quill_html').val();
+
+        if(!postCategory || postCategory === '' || !postTitle || !quill_html){
+            if(!postCategory || postCategory === ''){
+                alert('카테고리가 선택되지 않았습니다.');
+            } else if(!postTitle){
+                alert('제목이 작성되지 않았습니다.');
+            } else {
+                alert('내용이 작성되지 않았습니다.');
+            }
+            event.preventDefault();
+        } else {
+            alert('게시글이 작성되었습니다.');
+        }
+    });
+
+
 });

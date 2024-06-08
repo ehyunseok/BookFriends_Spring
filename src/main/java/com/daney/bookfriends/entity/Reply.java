@@ -26,16 +26,17 @@ public class Reply {
     @JoinColumn(name = "postID")
     private Board board;
 
-    @Column(name = "replyContent")
-    private String replyContent;
-
-    @Column(name = "likeCount")
-    private Integer likeCount;
-
-    @Column(name = "replyDate")
-    private Timestamp replyDate;
-
     @ManyToOne
     @JoinColumn(name = "recruitID")
     private Recruit recruit;
+
+    @Column(name = "replyContent")
+    private String replyContent;
+
+    @Column(name = "likeCount", columnDefinition = "INTEGER DEFAULT 0")
+    private Integer likeCount;
+
+    @Column(name = "replyDate", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp replyDate;
+
 }
