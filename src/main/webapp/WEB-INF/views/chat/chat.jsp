@@ -3,16 +3,16 @@
 <html>
 <head>
 <!-- header.jsp -->
-<%@ include file="/WEB-INF/views/commons/header.jsp" %>
+<%@ include file="../commons/header.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chat.css">
 </head>
 
 <body>
 <!-- body.jsp -->
-<%@ include file="/WEB-INF/views/commons/body.jsp" %>
+<%@ include file="../commons/body.jsp" %>
 
 <!-- navigation.jsp -->
-<%@ include file="/WEB-INF/views/commons/navigation.jsp" %>
+<%@ include file="../commons/navigation.jsp" %>
 
 <!-- container  -->
 <section class="container">
@@ -37,7 +37,7 @@
                             </div>
                         </li>
                     </ul>
-                    <ul class="list-unstyled chat-list mt-2 mb-0" id="peopleList">
+                    <ul class="list-unstyled chat-list mt-2 mb-0" id="peopleList2">
                         <li class="clearfix">
                             <div class="about">
                             	<div class="card mt-5 text-center" style="width:200px;">
@@ -86,64 +86,10 @@
         </div>
     </div>
 </section>
-<script>
-function getUnread() {
-	$.ajax({
-		type:"POST",
-		url:  '<%= request.getContextPath() %>/chatUnread',
-		data: {
-			userID: encodeURIComponent('<%= userID %>'),
-		},
-		success: function(result){
-			if(result>=1){
-				showUnread(result);
-			} else{
-				showUnread('');
-			}
-		}
-	});
-}
-function getInfiniteUnread(){
-	setInterval(function(){
-		getUnread();
-	}, 4000);
-}
-function showUnread(result){
-	$('#unread').html(result);
-}
-</script>
 
-<!-- 신고하기 모달 -->
-<div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal">신고하기</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="../reportAction.jsp" method="post">
-                    <div class="form-group">
-                        <label>신고 제목</label>
-                        <input type="text" name="reportTitle" class="form-control" maxlength="30">
-                    </div>
-                    <div class="form-group">
-                        <label>신고 내용</label>
-                        <textarea name="reportContent" class="form-control" maxlength="2048" style="height: 180px;"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                        <button type="submit" class="btn btn-danger">신고하기</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <!-- footer.jsp -->
-<%@ include file="/WEB-INF/views/commons/footer.jsp" %>
+<%@ include file="../commons/footer.jsp" %>
 </body>
 </html>

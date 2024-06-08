@@ -50,7 +50,7 @@
             <p class="card-text" style="text-align:justify; white-space:pre-wrap;">${board.postContent}</p>
             <div class="row">
                 <div class="col-12 text-right">
-                    <a class="like-button" style="color: black;" data-item-type="Post" data-item-id="${board.postID}" data-member-id="${currentMemberID}" href="javascript:void(0);">추천(${board.likeCount})</a>
+                    <a class="like-button" style="color: black;" data-item-cate="board" data-item-type="Post" data-item-id="${board.postID}" data-member-id="${currentMemberID}" href="javascript:void(0);">추천(${board.likeCount})</a>
                     <c:if test="${currentMemberID == board.member.memberID}">
                         | <a style="color: gray;" onclick="return confirm('수정하시겠습니까?')" href="${pageContext.request.contextPath}/board/update/${board.postID}">수정</a> |
                         <form id="deleteForm" action="${pageContext.request.contextPath}/board/delete/${board.postID}" method="post" style="display:none;">
@@ -99,7 +99,7 @@
                             　<small class="reply-date" data-post-date="${reply.replyDate}"></small>
                             <p style="text-align:justify; white-space:pre-wrap; padding-top:10px; font-size:large;">${reply.replyContent}</p>
                             <div class="text-right">
-                                <a class="like-button" style="color: black;" data-item-type="Reply" data-item-id="${reply.replyID}" data-member-id="${currentMemberID}" href="javascript:void(0);">추천(${reply.likeCount})</a>
+                                <a class="like-button" style="color: black;" data-item-cate="board" data-item-type="Reply" data-item-id="${reply.replyID}" data-member-id="${currentMemberID}" href="javascript:void(0);">추천(${reply.likeCount})</a>
                                 <c:if test="${currentMemberID == reply.member.memberID}">
                                     | <a style="color: gray;" onclick="return confirm('수정하시겠습니까?')" data-toggle="modal" href="#updateReplyModal${reply.replyID}">수정</a> |
                                     <form id="deleteReplyForm${reply.replyID}" action="${pageContext.request.contextPath}/board/deleteReply/${board.postID}/${reply.replyID}" method="post" style="display:none;">

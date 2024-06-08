@@ -75,7 +75,7 @@
                 </thead>
                 <tbody>
                     <c:forEach var="board" items="${boardList.content}">
-                        <tr onclick="window.location.href='${pageContext.request.contextPath}/board/post/${board.postID}'">
+                        <tr onclick="window.location.href='${pageContext.request.contextPath}/board/post/${board.postID}'" style="cursor: pointer;">
                             <td class="id">${board.postID}</td>
                             <td class="category">${board.postCategory}</td>
                             <td class="title">${board.postTitle} <small>(추천: ${board.likeCount})</small></td>

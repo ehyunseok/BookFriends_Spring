@@ -1,12 +1,10 @@
 package com.daney.bookfriends.board.service;
 
-import com.daney.bookfriends.Member.service.MemberService;
 import com.daney.bookfriends.board.dto.BoardDto;
 import com.daney.bookfriends.board.repository.BoardRepository;
 import com.daney.bookfriends.entity.Board;
 import com.daney.bookfriends.entity.Member;
 import com.daney.bookfriends.entity.Reply;
-import com.daney.bookfriends.reply.dto.ReplyDto;
 import com.daney.bookfriends.reply.repository.ReplyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -71,7 +69,7 @@ public class BoardService {
         }
     }
 
-
+    // 게시글 작성하기
     public Board registPost(BoardDto boardDto, String memberID) {
 
         // model mapper 라이브러리를 통해 BoardDto 객체를 Board 엔티티 객체로 변환

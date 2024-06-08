@@ -3,13 +3,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function handleLikeButtonClick(event) {
         var target = event.target;
+        var itemCate = target.getAttribute('data-item-cate');
         var itemType = target.getAttribute('data-item-type');
         var itemId = target.getAttribute('data-item-id');
         var memberId = target.getAttribute('data-member-id');
         var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
         var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-        var requestUrl = `${contextPath}/board/like${itemType}/${itemId}`;
+        var requestUrl = `${contextPath}/${itemCate}/like${itemType}/${itemId}`;
         console.log(`Requesting URL: ${requestUrl}`);
 
         fetch(requestUrl, {

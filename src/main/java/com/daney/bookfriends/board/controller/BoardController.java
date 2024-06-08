@@ -33,8 +33,6 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
     @Autowired
-    private BoardRepository boardRepository;
-    @Autowired
     private LikeyService likeyService;
 
     //게시판 메인 화면 불러오기

@@ -16,9 +16,17 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     // 상위 5개의 인기 게시글을 가져오는 메서드
     List<Board> findTop5ByOrderByLikeCountDesc();
 
-    @Query("SELECT b FROM Board b WHERE b.postTitle LIKE %:search% OR b.postContent LIKE %:search% OR b.member.memberID LIKE %:search%")
+    @Query("SELECT b FROM Board b " +
+            "WHERE b.postTitle LIKE %:search% " +
+            "OR b.postContent LIKE %:search% " +
+            "OR b.member.memberID LIKE %:search%")
     Page<Board> findByTitleOrContentOrMember(@Param("search") String search, Pageable pageable);
 
-    @Query("SELECT b FROM Board b WHERE b.postCategory = :postCategory AND (b.postTitle LIKE %:search% OR b.postContent LIKE %:search% OR b.member.memberID LIKE %:search%)")
+    @Query("SELECT b FROM Board b " +
+            "WHERE b.postCategory = :postCategory " +
+            "AND (b.postTitle LIKE %:search% " +
+            "OR b.postContent LIKE %:search% " +
+            "OR b.member.memberID " +
+            "LIKE %:search%)")
     Page<Board> findByCategoryAndTitleOrContentOrMember(@Param("postCategory") String postCategory, @Param("search") String search, Pageable pageable);
 }

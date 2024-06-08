@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 @Data
 public class ReviewDto {
     private Integer reviewID;
-    private String userID; // User의 userID를 사용
+    private String memberID;
     private String bookName;
     private String authorName;
     private String publisher;

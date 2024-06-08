@@ -20,7 +20,7 @@
             <div class="col card-wrapper">
                 <div class="card">
                     <div class="card-header text-center">
-                        <a href="${pageContext.request.contextPath}/review/bookReview" style="color: black;">
+                        <a href="${pageContext.request.contextPath}/review" style="color: black;">
                             <h5 class="card-title"><b>서평</b></h5>
                         </a>
                         <p class="card-text">추천수 top5</p>
@@ -42,7 +42,7 @@
             <div class="col card-wrapper">
                 <div class="card">
                     <div class="card-header text-center">
-                        <a href="${pageContext.request.contextPath}/board/board" style="color: black;">
+                        <a href="${pageContext.request.contextPath}/board" style="color: black;">
                             <h5 class="card-title"><b>자유게시판</b></h5>
                         </a>
                         <p class="card-text">인기글 top5</p>
