@@ -23,7 +23,4 @@ public class Likey {
     @Id
     @Column(name = "itemID", nullable = false)
     private Integer itemID;
-
-    @Column(name = "memberIP", length = 50)
-    private String memberIP;
 }

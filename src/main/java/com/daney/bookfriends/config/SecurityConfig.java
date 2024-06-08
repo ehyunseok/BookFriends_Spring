@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -20,25 +21,35 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                )
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/member/confirm").permitAll() // 인증 페이지 접근 허용
-                        .anyRequest().permitAll() // 모든 요청을 허용
+                        // 로그인 페이지와 관련된 요청, 정적 리소스는 모두 접근 가능하도록 설정
+                        .requestMatchers(
+                                "/member/login", "/member/join", "/member/sendVerificationCode", "/member/verifyCode",
+                                "/member/checkMemberID", "/css/**", "/js/**", "/images/**",
+                                "/WEB-INF/views/member/login.jsp",
+                                "/WEB-INF/views/member/join.jsp",
+                                "/WEB-INF/views/index.jsp")
+                        .permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/member/login")
                         .loginProcessingUrl("/member/login")
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/member/logout") // 로그아웃 URL
-                        .logoutSuccessUrl("/") // 로그아웃 후 리디렉션 URL
-                        .invalidateHttpSession(true) // 세션 무효화
-                        .deleteCookies("JSESSIONID") // 쿠키 삭제
+                        .logoutUrl("/member/logout")
+                        .logoutSuccessUrl("/member/login?logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
                 .exceptionHandling(exception -> exception
-                        .accessDeniedPage("/access-denied") // 접근 거부 시 이동할 페이지
+                        .accessDeniedPage("/access-denied")
                 )
                 .userDetailsService(customUserDetailsService);
 

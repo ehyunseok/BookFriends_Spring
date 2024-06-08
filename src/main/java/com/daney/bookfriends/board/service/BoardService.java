@@ -1,12 +1,20 @@
 package com.daney.bookfriends.board.service;
 
+import com.daney.bookfriends.Member.service.MemberService;
 import com.daney.bookfriends.board.dto.BoardDto;
 import com.daney.bookfriends.board.repository.BoardRepository;
 import com.daney.bookfriends.entity.Board;
 import com.daney.bookfriends.entity.Member;
+import com.daney.bookfriends.entity.Reply;
+import com.daney.bookfriends.reply.dto.ReplyDto;
+import com.daney.bookfriends.reply.repository.ReplyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.daney.bookfriends.Member.repository.MemberRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +34,9 @@ public class BoardService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private ReplyRepository replyRepository;
+
 
     // [메인페이지] 상위 5개의 게시글 리스트불러오기 메소드
     public List<BoardDto> getTop5Boards() {
@@ -35,9 +46,29 @@ public class BoardService {
                 .collect(Collectors.toList());
     }
 
+
+
     // 모든 게시글 리스트 가져오기
-    public List<Board> getAllPosts() {
-        return boardRepository.findAll();
+    public Page<Board> getFilteredPosts(int page, int size, String postCategory, String searchType, String search) {
+        Pageable pageable;
+
+        switch (searchType) {
+            case "조회수순":
+                pageable = PageRequest.of(page - 1, size, Sort.by("viewCount").descending());
+                break;
+            case "추천순":
+                pageable = PageRequest.of(page - 1, size, Sort.by("likeCount").descending());
+                break;
+            default:
+                pageable = PageRequest.of(page - 1, size, Sort.by("postDate").descending());
+                break;
+        }
+
+        if ("전체".equals(postCategory)) {
+            return boardRepository.findByTitleOrContentOrMember("%" + search + "%", pageable);
+        } else {
+            return boardRepository.findByCategoryAndTitleOrContentOrMember(postCategory, "%" + search + "%", pageable);
+        }
     }
 
 
@@ -52,7 +83,7 @@ public class BoardService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + memberID));
         board.setMember(member);
         
-        // Board 에티티를 db에 저장함
+        // Board 엔티티를 db에 저장함
         return boardRepository.save(board);
     }
 
@@ -86,8 +117,44 @@ public class BoardService {
         boardRepository.save(existingBoard);
     }
 
-    @Transactional
+    //게시글 삭제
     public void deletePost(Integer postID) {
         boardRepository.deleteById(postID);
+    }
+
+
+    // 댓글 달기
+    public Reply addReply(Integer postID, String replyContent, String memberID) {
+
+        Reply reply = new Reply();
+
+        // 댓글 작성자를 현재 사용자로 설정
+        reply.setMember(memberRepository.findByMemberID(memberID));
+
+        // 현재 게시글의 댓글으로 설정
+        Board board = boardRepository.findById(postID)
+                .orElseThrow(()->new IllegalArgumentException("Invalid postID:" + postID));
+        reply.setBoard(board);
+        reply.setBoard(board);
+        reply.setReplyContent(replyContent);
+        // Reply entity를 db에 저장
+        return replyRepository.save(reply);
+
+    }
+
+    //댓글 수정하기
+    public void updateReply(Integer replyID, String replyContent, String memberID) {
+        Reply reply = replyRepository.findById(replyID)
+                .orElseThrow(()->new IllegalArgumentException("Invalid replyID:" + replyID));
+        if(!reply.getMember().getMemberID().equals(memberID)){
+            throw new SecurityException("작성자만 수정할 수 있습니다.");
+        }
+        reply.setReplyContent(replyContent);
+        replyRepository.save(reply);
+    }
+
+    // 댓글 삭제
+    public void deleteReply(Integer replyID) {
+        replyRepository.deleteById(replyID);
     }
 }

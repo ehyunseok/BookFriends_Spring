@@ -28,6 +28,7 @@
     <div class="">
         <div class="card-body">
             <form action="${pageContext.request.contextPath}/board/regist" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <div class="form-group">
                     <select id="postCategory" name="postCategory">
                         <option value="">카테고리</option>
@@ -36,7 +37,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <input class="" name="postTitle" placeholder="제목을 작성해주세요."
+                    <input class="" name="postTitle" placeholder="제목을 작성해주세요." id="postTitle"
                            style="height: 50px; width:100%; border: none; background:transparent;">
                 </div>
                 <div class="form-group">

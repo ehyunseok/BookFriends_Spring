@@ -18,6 +18,7 @@
 <!-- container  -->
 <section class="container mt-5" style="max-width: 560px">
     <form method="post" action="${pageContext.request.contextPath}/member/login">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <!-- Spring Security의 기본 필드 이름과 일치하게 한다!!!
                 id= username
                 password= password -->

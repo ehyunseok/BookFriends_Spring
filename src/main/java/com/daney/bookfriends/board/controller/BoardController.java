@@ -4,9 +4,12 @@ import com.daney.bookfriends.board.dto.BoardDto;
 import com.daney.bookfriends.board.repository.BoardRepository;
 import com.daney.bookfriends.board.service.BoardService;
 import com.daney.bookfriends.entity.Board;
+import com.daney.bookfriends.entity.ItemType;
+import com.daney.bookfriends.likey.service.LikeyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,9 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.security.Principal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -33,12 +34,23 @@ public class BoardController {
     private BoardService boardService;
     @Autowired
     private BoardRepository boardRepository;
+    @Autowired
+    private LikeyService likeyService;
 
     //게시판 메인 화면 불러오기
     @GetMapping
-    public String getBoardList(Model model) {
-        List<Board> boardList = boardService.getAllPosts();
+    public String getBoardList(@RequestParam(defaultValue = "1") int page,
+                               @RequestParam(defaultValue = "5") int size,
+                               @RequestParam(defaultValue = "전체") String postCategory,
+                               @RequestParam(defaultValue = "최신순") String searchType,
+                               @RequestParam(defaultValue = "") String search,
+                               Model model) {
+        Page<Board> boardList = boardService.getFilteredPosts(page, size, postCategory, searchType, search);
         model.addAttribute("boardList", boardList);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", boardList.getTotalPages());
+        model.addAttribute("totalItems", boardList.getTotalElements());
+        model.addAttribute("size", size);
         return "board/board";
     }
 
@@ -58,7 +70,7 @@ public class BoardController {
             String memberID = principal.getName();  // principal 객체에서 사용자 이름(memberID)를 가져옴
             boardService.registPost(boardDto, memberID);    //boardService를 사용해 게시글 등록
         }
-        return "redirect:/board";     // 나중에 작성한 글 페이지로 이동하게 수정!!!!!!!
+        return "redirect:/board";
     }
 
     @Value("${file.upload-dir}")
@@ -145,15 +157,62 @@ public class BoardController {
     }
 
     // 게시글 삭제
-    @PostMapping("/delete/{postID}")
+    @DeleteMapping("/delete/{postID}")
     public String deletePost(@PathVariable("postID") Integer postID){
         boardService.deletePost(postID);
         return "redirect:/board";
     }
 
 
+    // 댓글 달기
+    @PostMapping("/registReply")
+    public String addReply(@RequestParam("postID") Integer postID,
+                           @RequestParam("replyContent") String replyContent, Principal principal) {
+        if (principal != null) {
+            String memberID = principal.getName();
+            boardService.addReply(postID, replyContent, memberID);
+        }
+        return "redirect:/board/post/" + postID;
+    }
+
+    //댓글 수정하기
+    @PostMapping("/updateReply")
+    public String updateReply(@RequestParam("replyID") Integer replyID,
+                              @RequestParam("postID") Integer postID,
+                              @RequestParam("replyContent") String replyContent,
+                              Principal principal) {
+
+        if(principal != null) {
+            String memberID = principal.getName();
+            boardService.updateReply(replyID, replyContent, memberID);
+        }
+
+        return "redirect:/board/post/" + postID;
+    }
 
 
+    //댓글 삭제
+    @DeleteMapping("/deleteReply/{postID}/{replyID}")
+    public String deleteReply(@PathVariable("replyID") Integer replyID, @PathVariable("postID") Integer postID){
+        boardService.deleteReply(replyID);
+        return "redirect:/board/post/" + postID;
+    }
+
+    // 게시글 추천하기
+    @PostMapping("/likePost/{postID}")
+    @ResponseBody
+    public String likePost(@PathVariable("postID") Integer postID, @RequestParam("memberID") String memberID){
+        boolean isLiked = likeyService.toggleLike(memberID, ItemType.POST, postID);
+        return isLiked ? "liked" : "unliked";
+    }
+
+    // 게시글 속 댓글 추천하기
+    @PostMapping("/likeReply/{replyID}")
+    @ResponseBody
+    public String likeReply(@PathVariable("replyID") Integer replyID, @RequestParam("memberID") String memberID) {
+        boolean isLiked = likeyService.toggleLike(memberID, ItemType.REPLY, replyID);
+        return isLiked ? "liked" : "unliked";
+    }
 
 
 }

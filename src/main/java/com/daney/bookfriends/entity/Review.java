@@ -22,19 +22,19 @@ public class Review {
     @JoinColumn(name = "memberID")
     private Member member;
 
-    @Column(name = "bookName", length = 500)
+    @Column(name = "bookName")
     private String bookName;
 
-    @Column(name = "authorName", length = 100)
+    @Column(name = "authorName")
     private String authorName;
 
-    @Column(name = "publisher", length = 20)
+    @Column(name = "publisher")
     private String publisher;
 
-    @Column(name = "category", length = 20)
+    @Column(name = "category")
     private String category;
 
-    @Column(name = "reviewTitle", length = 500)
+    @Column(name = "reviewTitle")
     private String reviewTitle;
 
     @Column(name = "reviewContent")
@@ -46,9 +46,9 @@ public class Review {
     @Column(name = "registDate")
     private Timestamp registDate;
 
-    @Column(name = "likeCount")
+    @Column(name = "likeCount", columnDefinition = "INTEGER DEFAULT 0")
     private Integer likeCount;
 
-    @Column(name = "viewCount")
+    @Column(name = "viewCount", columnDefinition = "INTEGER DEFAULT 0")
     private Integer viewCount;
 }
