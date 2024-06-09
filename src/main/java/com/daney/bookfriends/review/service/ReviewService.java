@@ -103,4 +103,10 @@ public class ReviewService {
 
         reviewRepository.save(existingReview);
     }
+
+    // 서평 삭제
+    @Transactional
+    public void deleteReview(Integer reviewID) {
+        reviewRepository.deleteById(reviewID);
+    }
 }

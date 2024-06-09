@@ -133,7 +133,6 @@ public class BoardService {
         Board board = boardRepository.findById(postID)
                 .orElseThrow(()->new IllegalArgumentException("Invalid postID:" + postID));
         reply.setBoard(board);
-        reply.setBoard(board);
         reply.setReplyContent(replyContent);
         // Reply entity를 db에 저장
         return replyRepository.save(reply);

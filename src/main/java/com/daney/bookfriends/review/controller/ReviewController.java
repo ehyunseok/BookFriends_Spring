@@ -118,41 +118,11 @@ public class ReviewController {
         return "redirect:/review/post/" + reviewID;
     }
 
+    // 서평 삭제
+    @DeleteMapping("/delete/{reviewID}")
+    public String deleteReview(@PathVariable("reviewID") Integer reviewID){
+        reviewService.deleteReview(reviewID);
+        return "redirect:/review";
+    }
 
-
-
-
-
-
-    // 상위 5개 리뷰 가져오기(HomeController로 이동해야함)
-//    @GetMapping
-//    public ResponseEntity<List<ReviewDto>> getTop5Reviews() {
-//        List<ReviewDto> reviews = reviewService.getTop5Reviews();
-//        return ResponseEntity.ok(reviews);
-//    }
-//
-//    @GetMapping("/{reviewID}")
-//    public ResponseEntity<ReviewDto> getReviewById(@PathVariable Integer reviewID) {
-//        ReviewDto review = reviewService.getReviewById(reviewID);
-//        return ResponseEntity.ok(review);
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDto reviewDto) {
-//        ReviewDto createdReview = reviewService.createReview(reviewDto);
-//        return ResponseEntity.ok(createdReview);
-//    }
-//
-//    @PutMapping("/{reviewID}")
-//    public ResponseEntity<ReviewDto> updateReview(@PathVariable Integer reviewID, @RequestBody ReviewDto reviewDto) {
-//        reviewDto.setReviewID(reviewID);
-//        ReviewDto updatedReview = reviewService.updateReview(reviewDto);
-//        return ResponseEntity.ok(updatedReview);
-//    }
-//
-//    @DeleteMapping("/{reviewID}")
-//    public ResponseEntity<Void> deleteReview(@PathVariable Integer reviewID) {
-//        reviewService.deleteReview(reviewID);
-//        return ResponseEntity.noContent().build();
-//    }
 }

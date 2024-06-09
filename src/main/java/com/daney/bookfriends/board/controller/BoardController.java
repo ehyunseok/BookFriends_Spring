@@ -1,7 +1,6 @@
 package com.daney.bookfriends.board.controller;
 
 import com.daney.bookfriends.board.dto.BoardDto;
-import com.daney.bookfriends.board.repository.BoardRepository;
 import com.daney.bookfriends.board.service.BoardService;
 import com.daney.bookfriends.entity.Board;
 import com.daney.bookfriends.entity.ItemType;
