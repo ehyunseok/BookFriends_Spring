@@ -33,14 +33,15 @@
 
 <!-- container -->
 <section class="container mt-3 mb-5">
-    <div class="card bg-light mt-3">
+    <span class="text-left" id="pageInfo"><h2>서평</h2></span>
+    <div class="card bg-light mt-1">
         <div class="card-header bg-light">
             <div class="btn-group dropright">
                 <button id="goToChat" class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                     <h5 class="card-title"><img src="${pageContext.request.contextPath}/images/icon.png" style="height:30px;"> <b>${review.member.memberID}</b></h5>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chat/${review.member.memberID}">채팅하기</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chatting/${review.member.memberID}">채팅하기</a>
                 </div>
             </div>
             <p class="card-text">조회수: ${review.viewCount} | 작성일: <span class="post-date" data-post-date="${review.registDate}"></span></p>

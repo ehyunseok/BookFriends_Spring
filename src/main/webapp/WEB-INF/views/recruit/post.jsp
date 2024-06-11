@@ -33,7 +33,8 @@
 
 <!-- container  -->
 <section class="container mt-3 mb-5">
-    <div class="card bg-light mt-3">
+    <span class="text-left" id="pageInfo"><h2>독서모임</h2></span>
+    <div class="card bg-light mt-1">
         <div class="card-header bg-light">
             <div class="row">
                 <div class="ml-1 btn-group dropright">
@@ -41,7 +42,7 @@
                         <h5 class="card-title"><img src="${pageContext.request.contextPath}/images/icon.png" style="height:30px;"> <b>${recruit.member.memberID}</b></h5>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdown">
-                        <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chat/${recruit.member.memberID}">채팅하기</a>
+                        <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chatting/${recruit.member.memberID}">채팅하기</a>
                     </div>
                 </div>
                 <div class="ml-auto mr-3 mt-1">
@@ -108,7 +109,7 @@
                                     <h5 class="card-title"><img src="../../images/icon.png" style="height:30px;"> <b>${reply.member.memberID}</b></h5>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdown">
-                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chat2/${reply.member.memberID}">채팅하기</a>
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chatting/${reply.member.memberID}">채팅하기</a>
                                 </div>
                             </div>
                             　<small class="reply-date" data-post-date="${reply.replyDate}"></small>

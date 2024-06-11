@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -19,11 +20,11 @@ public class Chat {
     private Integer chatID;
 
     @ManyToOne
-    @JoinColumn(name = "senderID")
+    @JoinColumn(name = "senderID", referencedColumnName = "memberID")
     private Member sender;
 
     @ManyToOne
-    @JoinColumn(name = "receiverID")
+    @JoinColumn(name = "receiverID", referencedColumnName = "memberID")
     private Member receiver;
 
     @Column(name = "message")
@@ -34,4 +35,5 @@ public class Chat {
 
     @Column(name = "chatRead")
     private Boolean chatRead;
+
 }

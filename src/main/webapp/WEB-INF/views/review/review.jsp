@@ -15,8 +15,9 @@
 <%@ include file="../commons/navigation.jsp" %>
 
 <!-- container -->
-<section class="container">
-    <form method="get" action="${pageContext.request.contextPath}/review" class="form-inline mt-3">
+<section class="container mt-3 mb-5">
+    <span class="text-left" id="pageInfo"><h2>서평</h2></span>
+    <form method="get" action="${pageContext.request.contextPath}/review" class="form-inline mt-1">
         <select name="category" class="form-control mx-1 mt-2">
             <option value="전체" ${param.category == '전체' ? 'selected' : ''}>전체</option>
             <option value="문학" ${param.category == '문학' ? 'selected' : ''}>문학</option>

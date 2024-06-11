@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -32,6 +33,14 @@ public class WebConfig implements WebMvcConfigurer {
                 .resourceChain(true);
     }
 
+    // 뷰 리졸버 설정 추가
+    @Bean
+    public InternalResourceViewResolver viewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/views/");
+        resolver.setSuffix(".jsp");
+        return resolver;
+    }
 
 
     /* HTTP 메소드의 문제는 주로 Spring MVC의 핸들러 매핑이 해당 메소드에 대한 요청을 처리할 수 없을 때 발생한다.

@@ -3,7 +3,12 @@
 .navbar-brand {
 	font-family: 'Black Han Sans', sans-sefif;
 	font-size: 35px;
-} 
+}
+
+#pageInfo h2 {
+	font-family: 'Black Han Sans', sans-sefif;
+	font-weight: lighter;
+}
 
 .navbar-nav {
 	font-family: "IBM Plex Sans KR", sans-serif;

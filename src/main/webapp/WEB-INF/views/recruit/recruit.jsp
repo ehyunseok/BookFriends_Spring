@@ -17,8 +17,9 @@
 <%@ include file="../commons/navigation.jsp" %>
 
 <!-- container  -->
-<section class="container">
-    <form method="get" action="${pageContext.request.contextPath}/recruit" class="form-inline mt-3">
+<section class="container mt-3 mb-5">
+    <span class="text-left" id="pageInfo"><h2>독서모임</h2></span>
+    <form method="get" action="${pageContext.request.contextPath}/recruit" class="form-inline mt-1">
         <select name="recruitStatus" class="form-control mx-1 mt-2">
             <option value="전체" ${param.recruitStatus == '전체' ? 'selected' : ''}>전체</option>
             <option value="모집중" ${param.recruitStatus == '모집중' ? 'selected' : ''}>모집중</option>

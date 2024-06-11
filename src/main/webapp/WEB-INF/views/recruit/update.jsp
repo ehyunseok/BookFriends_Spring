@@ -25,12 +25,15 @@
 
 <!-- container  -->
 <section class="container mt-3 mb-5">
-    <div class="">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title font-weight-bold mt-2">모집글 수정</h5>
+        </div>
         <div class="card-body">
             <form action="${pageContext.request.contextPath}/recruit/update/${recruit.recruitID}" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <div class="form-group">
-                    <select id="recruitStatus" name="recruitStatus">
+                    <select id="recruitStatus" name="recruitStatus" class="form-control">
                         <option value="">카테고리</option>
                         <option value="모집중" <c:if test="${recruit.recruitStatus == '모집중'}">selected</c:if>>모집중</option>
                         <option value="모집완료" <c:if test="${recruit.recruitStatus == '모집완료'}">selected</c:if>>모집완료</option>

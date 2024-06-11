@@ -1,0 +1,55 @@
+.search-container {
+    margin-top: 20px;
+}
+.search-container form {
+    display: flex;
+    justify-content: center;
+}
+.search-container form input, .search-container form button {
+    margin: 5px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+table, th, td {
+    border: 1px solid black;
+}
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+.error {
+    color: red;
+    text-align: center;
+}
+.message {
+    color: blue;
+    text-align: center;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.pagination a {
+    margin: 0 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    color: black;
+}
+.pagination a.active {
+    background-color: rgba(62, 71, 72, 0.75);
+    color: white;
+    border: 1px solid #4CAF50;
+}
+.pagination a.disabled {
+    pointer-events: none;
+    color: #999;
+    border: 1px solid #ddd;
+}
+.pagination a:hover:not(.active):not(.disabled) {
+    background-color: #ddd;
+}

@@ -1,9 +1,11 @@
-body{
-    background-color: #efefef;
+body {
+    background-color: #f4f4f9;
+    font-family: 'Arial', sans-serif;
     height: 100%;
     margin: 0;
     padding: 0;
 }
+
 .card {
     background: #fff;
     transition: .5s;
@@ -12,10 +14,115 @@ body{
     border-radius: .55rem;
     position: relative;
     width: 100%;
-    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 10%);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
 
+.profile-section {
+    padding: 20px;
+}
 
+.profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-info .name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.profile-info .status {
+    font-size: 14px;
+    color: #666;
+}
+
+.unread-messages .card {
+    width: 100%;
+}
+
+.chat-list-section {
+    padding: 20px;
+}
+
+.chat-list-header {
+    margin-bottom: 10px;
+}
+
+.chat-list ul {
+    padding: 0;
+    list-style: none;
+}
+
+.chat-list li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eaeaea;
+    transition: background-color 0.3s;
+}
+
+.chat-list li:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.chat-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chat-about {
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-about .name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.chat-about .message {
+    font-size: 14px;
+    color: #333;
+}
+
+.chat-about .time {
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+}
+
+.badge-info {
+    background-color: #17a2b8;
+}
+
+@media only screen and (max-width: 767px) {
+    .profile-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .unread-messages .card {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
+
+/* 기존 스타일 보존 */
 .chat-app .people-list {
     width: 280px;
     position: absolute;
@@ -23,107 +130,107 @@ body{
     top: 0;
     padding: 20px;
     z-index: 7;
+    background: #fff;
+    border-right: 1px solid #eaeaea;
 }
 
 .chat-app .chat {
     margin-left: 280px;
     border-left: 1px solid #eaeaea;
+    height: 100%;
 }
 
 .people-list {
-    -moz-transition: .5s;
-    -o-transition: .5s;
-    -webkit-transition: .5s;
     transition: .5s;
 }
 
 .people-list .chat-list li {
     padding: 10px 15px;
     list-style: none;
-    border-radius: 3px
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
 }
 
 .people-list .chat-list li:hover {
     background: #efefef;
-    cursor: pointer
+    cursor: pointer;
 }
 
 .people-list .chat-list li.active {
-    background: #efefef
+    background: #efefef;
 }
 
 .people-list .chat-list li .name {
-    font-size: 15px
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .people-list .chat-list img {
     width: 45px;
-    border-radius: 50%
-}
-
-.people-list img {
-    float: left;
-    border-radius: 50%
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
 }
 
 .people-list .about {
-    float: left;
-    padding-left: 8px
+    display: flex;
+    flex-direction: column;
 }
 
 .people-list .status {
     color: #999;
-    font-size: 13px
+    font-size: 13px;
 }
 
 .chat .chat-header {
     padding: 15px 20px;
-    border-bottom: 2px solid #f4f7f6
+    border-bottom: 2px solid #f4f7f6;
 }
 
 .chat .chat-header img {
     float: left;
     border-radius: 40px;
-    width: 40px
+    width: 40px;
 }
 
 .chat .chat-header .chat-about {
     float: left;
-    padding-left: 10px
+    padding-left: 10px;
 }
 
 .chat .chat-history {
     padding: 20px;
     border-bottom: 2px solid #fff;
     overflow-y: auto;
-    height: 300px
+    height: 300px;
 }
 
 .chat .chat-history ul {
-    padding: 0
+    padding: 0;
 }
 
 .chat .chat-history ul li {
     list-style: none;
-    margin-bottom: 30px
+    margin-bottom: 30px;
 }
 
 .chat .chat-history ul li:last-child {
-    margin-bottom: 0px
+    margin-bottom: 0px;
 }
 
 .chat .chat-history .message-data {
-    margin-bottom: 15px
+    margin-bottom: 15px;
 }
 
 .chat .chat-history .message-data img {
     border-radius: 40px;
-    width: 40px
+    width: 40px;
 }
 
 .chat .chat-history .message-data-time {
     color: #434651;
-    padding-left: 6px
+    padding-left: 6px;
 }
 
 .chat .chat-history .message {
@@ -133,9 +240,8 @@ body{
     font-size: 16px;
     border-radius: 7px;
     display: inline-block;
-    position: relative
+    position: relative;
 }
-
 
 .chat .chat-history .message:after {
     bottom: 100%;
@@ -148,11 +254,11 @@ body{
     pointer-events: none;
     border-bottom-color: #fff;
     border-width: 10px;
-    margin-left: -10px
+    margin-left: -10px;
 }
 
 .chat .chat-history .my-message {
-    background: #efefef
+    background: #efefef;
 }
 
 .chat .chat-history .my-message:after {
@@ -166,7 +272,7 @@ body{
     pointer-events: none;
     border-bottom-color: #efefef;
     border-width: 10px;
-    margin-left: -10px
+    margin-left: -10px;
 }
 
 .chat .chat-history .other-message {
@@ -190,23 +296,23 @@ body{
 .me {
     margin-right: 2px;
     font-size: 8px;
-    vertical-align: middle
+    vertical-align: middle;
 }
 
 .online {
-    color: #86c541
+    color: #86c541;
 }
 
 .offline {
-    color: #e47297
+    color: #e47297;
 }
 
 .me {
-    color: #1d8ecd
+    color: #1d8ecd;
 }
 
 .float-right {
-    float: right
+    float: right;
 }
 
 .clearfix:after {
@@ -215,7 +321,7 @@ body{
     font-size: 0;
     content: " ";
     clear: both;
-    height: 0
+    height: 0;
 }
 
 @media only screen and (max-width: 767px) {
@@ -225,72 +331,70 @@ body{
         overflow-x: auto;
         background: #fff;
         left: -400px;
-        display: none
+        display: none;
     }
     .chat-app .people-list.open {
-        left: 0
+        left: 0;
     }
     .chat-app .chat {
-        margin: 0
+        margin: 0;
     }
     .chat-app .chat .chat-header {
-        border-radius: 0.55rem 0.55rem 0 0
+        border-radius: 0.55rem 0.55rem 0 0;
     }
     .chat-app .chat-history {
         height: 300px;
-        overflow-x: auto
+        overflow-x: auto;
     }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
     .chat-app .chat-list {
         height: 650px;
-        overflow-x: auto
+        overflow-x: auto;
     }
     .chat-app .chat-history {
         height: 600px;
-        overflow-x: auto
+        overflow-x: auto;
     }
 }
 
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
     .chat-app .chat-list {
         height: 480px;
-        overflow-x: auto
+        overflow-x: auto;
     }
     .chat-app .chat-history {
         height: calc(100vh - 350px);
-        overflow-x: auto
+        overflow-x: auto;
     }
 }
 
-
 /* 내가 추가한 것 */
-#glass{
-	background-image: url('../images/magnifying-glass.svg');
+#glass {
+    background-image: url('../images/magnifying-glass.svg');
     background-size: 50%;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-#sendsvg{
-	height:62px;
-	background-image: url('../images/paper-plane.svg');
+#sendsvg {
+    height: 62px;
+    background-image: url('../images/paper-plane.svg');
     background-size: 50%;
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
 }
 
-
-#modalS{
-	background-color: #B7F0B1;
+#modalS {
+    background-color: #B7F0B1;
 }
-#modalW{
-	background-color: #FFEF85;
+#modalW {
+    background-color: #FFEF85;
 }
-#modalD{
-	background-color: #FFC6C6;
+#modalD {
+    background-color: #FFC6C6;
 }
 
 .chat-history {
@@ -301,9 +405,8 @@ body{
     height: auto;
 }
 
-
 #peopleList {
-	overflow-y: auto;
+    overflow-y: auto;
     max-height: 500px;
 }
 
@@ -318,7 +421,6 @@ body{
     display: flex;
     flex-direction: column;
 }
-
 
 /* 메시지 데이터 박스 정렬 */
 .message-data {
@@ -377,7 +479,6 @@ body{
     width: 100%;
 }
 
-
 /* 메시지 박스 스타일 */
 .my-message {
     padding: 10px 20px;
@@ -387,8 +488,6 @@ body{
     max-width: 80%;
     background: #efefef;
 }
-
-
 
 .my-message {
     background: #efefef;
@@ -401,10 +500,21 @@ body{
 }
 
 .other-message {
-	padding-left: 20px;
+    padding-left: 20px;
     align-self: flex-end;
     background: #e8f1f3;
     width: fit-content; /* Content width but allows alignment */
     border-radius: 8px;
     float: right;
+}
+
+.header-divider {
+    border: none;
+    border-top: 1px solid #eaeaea;
+    margin-top: 10px;
+}
+
+.chat-list2 {
+    height: 480px; /* 원하는 고정 높이 설정 */
+    overflow-y: auto; /* 세로 스크롤바 추가 */
 }

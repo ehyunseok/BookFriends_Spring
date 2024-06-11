@@ -25,7 +25,10 @@
 
 <!-- container  -->
 <section class="container mt-3 mb-5">
-    <div class="">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title font-weight-bold mt-2">모집글 작성</h5>
+        </div>
         <div class="card-body">
             <form action="${pageContext.request.contextPath}/recruit/regist" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

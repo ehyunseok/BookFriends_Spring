@@ -33,6 +33,7 @@
 
 <!-- container  -->
 <section class="container mt-3 mb-5">
+    <span class="text-left" id="pageInfo"><h2>자유게시판</h2></span>
     <div class="card bg-light mt-3">
         <div class="card-header bg-light">
             <div class="btn-group dropright">
@@ -40,7 +41,7 @@
                     <h5 class="card-title"><img src="../../images/icon.png" style="height:30px;"> <b>${board.member.memberID}</b></h5>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdown">
-                    <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chat/${board.member.memberID}">채팅하기</a>
+                    <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chatting/${board.member.memberID}">채팅하기</a>
                 </div>
             </div>
             <p class="card-text">조회수: ${board.viewCount} | 작성일: <span class="post-date" data-post-date="${board.postDate}"></span></p>
@@ -93,7 +94,7 @@
                                     <h5 class="card-title"><img src="../../images/icon.png" style="height:30px;"> <b>${reply.member.memberID}</b></h5>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdown">
-                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chat2/${reply.member.memberID}">채팅하기</a>
+                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/chat/chatting/${reply.member.memberID}">채팅하기</a>
                                 </div>
                             </div>
                             　<small class="reply-date" data-post-date="${reply.replyDate}"></small>

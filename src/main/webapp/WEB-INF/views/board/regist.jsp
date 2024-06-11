@@ -25,20 +25,22 @@
 
 <!-- container  -->
 <section class="container mt-3 mb-5">
-    <div class="">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title font-weight-bold mt-2">게시글 작성</h5>
+        </div>
         <div class="card-body">
             <form action="${pageContext.request.contextPath}/board/regist" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <div class="form-group">
-                    <select id="postCategory" name="postCategory">
+                    <select id="postCategory" name="postCategory" class="form-control">
                         <option value="">카테고리</option>
                         <option value="질문">질문</option>
                         <option value="사담">사담</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <input class="" name="postTitle" placeholder="제목을 작성해주세요." id="postTitle"
-                           style="height: 50px; width:100%; border: none; background:transparent;">
+                    <input class="form-control" name="postTitle" placeholder="제목을 작성해주세요." id="postTitle">
                 </div>
                 <div class="form-group">
                     <div id="editor"></div>

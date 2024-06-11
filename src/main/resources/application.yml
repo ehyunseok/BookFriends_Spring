@@ -1,6 +1,8 @@
 spring:
   application:
     name: bookfriends
+  config:
+    import: "classpath:api-key.yml"
   datasource:
     url: jdbc:mysql://localhost:3306/bookfriends
     username: root
@@ -47,6 +49,7 @@ logging:
     org.springframework.boot: DEBUG
     org.springframework: DEBUG
     com.daney.bookfriends: DEBUG
+    org.springframework.web.client.RestTemplate: DEBUG #국중 api 테스트를 위해 추가
 
 # 서버
 server:

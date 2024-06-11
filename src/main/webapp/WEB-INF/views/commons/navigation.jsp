@@ -1,8 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%
-    String currentURL = request.getRequestURI();
-%>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="${pageContext.request.contextPath}/">독서친구</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
@@ -10,28 +7,36 @@
     </button>
     <div id="navbar" class="collapse navbar-collapse">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/") ? " font-weight-bold" : "" %>"
+            <li class="nav-item ">
+                <a class="nav-link "
                    href="${pageContext.request.contextPath}/">메인</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/review") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/review") ? " font-weight-bold" : "" %>"
+            <li class="nav-item ">
+                <a class="nav-link "
                    href="${pageContext.request.contextPath}/review">서평</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/board") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/board") ? " font-weight-bold" : "" %>"
+            <li class="nav-item ">
+                <a class="nav-link "
+                   href="${pageContext.request.contextPath}/library/recommended">사서추천도서</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link "
+                   href="${pageContext.request.contextPath}/library/search">도서관 검색</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link "
                    href="${pageContext.request.contextPath}/board">자유게시판</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/recruit") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/recruit") ? " font-weight-bold" : "" %>"
+            <li class="nav-item ">
+                <a class="nav-link "
                    href="${pageContext.request.contextPath}/recruit">독서모임</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/market") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/market") ? " font-weight-bold" : "" %>"
+            <li class="nav-item ">
+                <a class="nav-link "
                    href="${pageContext.request.contextPath}/market">중고장터</a>
             </li>
-            <li class="nav-item <%= currentURL.equals(request.getContextPath() + "/chat") ? " active" : "" %>">
-                <a class="nav-link <%= currentURL.equals(request.getContextPath() + "/chat") ? " font-weight-bold" : "" %>"
+            <li class="nav-item ">
+                <a class="nav-link "
                    href="${pageContext.request.contextPath}/chat">채팅</a>
             </li>
 
@@ -68,3 +73,4 @@
         </ul>
     </div>
 </nav>
+

@@ -1,0 +1,73 @@
+.recommended-container {
+    margin-top: 20px;
+}
+.filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.filter-section form {
+    display: flex;
+    align-items: center;
+}
+.filter-section label {
+    margin-right: 10px;
+}
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+.tabs a {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #000;
+}
+.tabs a.active {
+    background-color: #ccc;
+}
+.book-list {
+    list-style: none;
+    padding: 0;
+}
+.book-item {
+    display: flex;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+.book-item img {
+    margin-right: 15px;
+}
+.book-details {
+    display: flex;
+    flex-direction: column;
+}
+.error {
+    color: red;
+    text-align: center;
+}
+.message {
+    color: blue;
+    text-align: center;
+}
+.pagination a {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #000;
+}
+
+.pagination a.active {
+    background-color: #ccc;
+}
+
+.pagination span.disabled {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #eee;
+    color: #ddd;
+    cursor: not-allowed;
+}

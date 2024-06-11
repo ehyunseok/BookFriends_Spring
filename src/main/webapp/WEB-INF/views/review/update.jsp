@@ -25,7 +25,7 @@
 <section class="container mt-3 mb-5">
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title font-weight-bold mt-2">서평 작성</h5>
+            <h5 class="card-title font-weight-bold mt-2">서평 수정</h5>
         </div>
         <div class="card-body pl-5 pb-5">
             <form action="${pageContext.request.contextPath}/review/update/${review.reviewID}" method="post" enctype="multipart/form-data">
