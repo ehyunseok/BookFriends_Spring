@@ -2,13 +2,38 @@ package com.daney.bookfriends.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    //json과 xml 충돌 방지를 위해 추가
+    @Bean
+    public MappingJackson2HttpMessageConverter jsonConverter() {
+        return new MappingJackson2HttpMessageConverter();
+    }
+    @Bean
+    public MappingJackson2XmlHttpMessageConverter xmlConverter() {
+        return new MappingJackson2XmlHttpMessageConverter();
+    }
+
+
+    // json 형식 파일 업로드을 위해 추가
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer
+                .favorParameter(false)
+                .ignoreAcceptHeader(true)
+                .defaultContentType(MediaType.APPLICATION_JSON)
+                .mediaType("json", MediaType.APPLICATION_JSON)
+                .mediaType("xml", MediaType.APPLICATION_XML);
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -51,5 +76,7 @@ public class WebConfig implements WebMvcConfigurer {
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();
     }
+
+    
 }
 

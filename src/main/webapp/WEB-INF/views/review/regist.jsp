@@ -36,11 +36,9 @@
                         <select class="form-control pb-2" id="category" name="category">
                             <option value="">선택</option>
                             <option value="문학">문학</option>
-                            <option value="사회">사회</option>
-                            <option value="과학">과학</option>
-                            <option value="예술">예술</option>
-                            <option value="역사">역사</option>
-                            <option value="언어(어학)">언어(어학)</option>
+                            <option value="인문과학">인문과학</option>
+                            <option value="사회과학">사회과학</option>
+                            <option value="자연과학">자연과학</option>
                             <option value="기타">기타</option>
                         </select>
                     </div>

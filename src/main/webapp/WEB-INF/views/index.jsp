@@ -13,52 +13,23 @@
 <!-- navigation.jsp -->
 <%@ include file="./commons/navigation.jsp" %>
 
-<section class="container m-5>
-<div class="center-container">
-        <div class="row row-cols-1 row-cols-md-2 mt-5">
-            <!-- 서평 인기글 -->
-            <div class="col card-wrapper">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <a href="${pageContext.request.contextPath}/review" style="color: black;">
-                            <h5 class="card-title"><b>서평</b></h5>
-                        </a>
-                        <p class="card-text">추천수 top5</p>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <c:forEach var="review" items="#">
-                            <li class="list-group-item" onclick="">
-                                [토지 <small>박경리</small>]
-                                <div class="truncate-text">
-                                    <b>review.reviewTitle</b>  <small style="font-size:xx-small;">추천:10000</small>
-                                </div>
-                                <small><img src="${pageContext.request.contextPath}/images/icon.png" style="height:12px;">memberID</small>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                </div>
-            </div>
-            <!-- 자유게시판 인기글 -->
-            <div class="col card-wrapper">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <a href="${pageContext.request.contextPath}/board" style="color: black;">
-                            <h5 class="card-title"><b>자유게시판</b></h5>
-                        </a>
-                        <p class="card-text">인기글 top5</p>
-                    </div>
-                    <ul class="list-group list-group-flush">
-                        <c:forEach var="board" items="#">
-                            <li class="list-group-item" onclick="">
-                                [board.postCategory]
-                                <div class="truncate-text">
-                                    <b>board.postTitle</b>  <small style="font-size:xx-small;">추천:board.likeCount</small>
-                                </div>
-                                <small><img src="${pageContext.request.contextPath}/images/icon.png" style="height:15px;">board.memberID</small>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                </div>
+<section class="container mt-5 mb-5">
+    <div class="card m-auto" style="max-width: 500px;">
+        <div class="card-body text-center">
+            <img src="${pageContext.request.contextPath}/images/icon.png" style="height: 50px;">
+            <h5 class="card-title mt-3"><b><c:out value="${pageContext.request.userPrincipal.name}"/></b>님</h5>
+            <h6 class="card-subtitle m-2 text-muted">환영합니다</h6>
+            <form action="${pageContext.request.contextPath}/member/logout" method="post">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-secondary form-control">로그아웃</button>
+            </form>
+            <div class="row justify-content-center mt-3">
+                <button type="button" class="btn btn-warning mr-1"  onclick=window.location.href="${pageContext.request.contextPath}/review">서평</button>
+                <button type="button" class="btn btn-warning mr-1" onclick=window.location.href='${pageContext.request.contextPath}/library/recommended'>추천도서</button>
+                <button type="button" class="btn btn-warning mr-1" onclick=window.location.href='${pageContext.request.contextPath}/library/search'>도서 검색</button>
+                <button type="button" class="btn btn-warning mr-1" onclick=window.location.href='${pageContext.request.contextPath}/board'>자유게시판</button>
+                <button type="button" class="btn btn-warning mr-1"  onclick=window.location.href="${pageContext.request.contextPath}/recruit">독서모임</button>
+                <button type="button" class="btn btn-warning" onclick=window.location.href='${pageContext.request.contextPath}/chat'>채팅</button>
             </div>
         </div>
     </div>

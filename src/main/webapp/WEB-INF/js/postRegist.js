@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var contextPath = document.querySelector('body').getAttribute('data-context-path');
+    console.log('contextPath= '+contextPath);
     var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
@@ -44,13 +44,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     xhr.setRequestHeader(csrfHeader, csrfToken);
                 },
                 success: function (response) {
+                    console.log("Upload response=", response);  // 응답 데이터를 로그로 출력
                     const imageUrl = contextPath +  '/uploads/' + response.fileName;
                     const range = quill.getSelection();
                     quill.insertEmbed(range.index, 'image', imageUrl);
                 },
-                error: function () {
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Upload error=", textStatus, errorThrown);  // 에러 메시지를 로그로 출력
                     alert('이미지 업로드 실패');
                 }
+
             });
         });
     }
@@ -77,6 +80,4 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('게시글이 작성되었습니다.');
         }
     });
-
-
 });

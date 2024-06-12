@@ -8,12 +8,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "member")
 @DynamicInsert
-public class Member {
+public class Member implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name="memberID")

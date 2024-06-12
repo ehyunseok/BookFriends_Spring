@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +34,7 @@ public class BoardController {
     private BoardService boardService;
     @Autowired
     private LikeyService likeyService;
+
 
     //게시판 메인 화면 불러오기
     @GetMapping
@@ -74,13 +76,18 @@ public class BoardController {
     private String uploadDir;
 
     // 이미지 업로드
-    @PostMapping("/uploadImage")
+    @PostMapping(value = "/uploadImage", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("uploadFile") MultipartFile uploadFile) {
         log.debug("Upload Image Endpoint Hit");
 
         File uploadDirPath  = new File(uploadDir);
-        log.debug("Upload Directory: {}", uploadDir);
+        if (!uploadDirPath.exists()) {
+            boolean created = uploadDirPath.mkdirs();
+            log.debug("Created upload directory: {}", created);
+        }
+
+        log.debug("Upload Directory: {}", uploadDir);;
 
 
         // 파일이름을 생성(현재 시간을 기준으로 고유한 파일 생성)

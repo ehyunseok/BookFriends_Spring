@@ -36,11 +36,9 @@
                         <select class="form-control pb-2" id="category" name="category">
                             <option value="">선택</option>
                             <option value="문학" <c:if test="${review.category == '문학'}">selected</c:if>>문학</option>
-                            <option value="사회" <c:if test="${review.category == '사회'}">selected</c:if>>사회</option>
-                            <option value="과학" <c:if test="${review.category == '과학'}">selected</c:if>>과학</option>
-                            <option value="예술" <c:if test="${review.category == '예술'}">selected</c:if>>예술</option>
-                            <option value="역사" <c:if test="${review.category == '역사'}">selected</c:if>>역사</option>
-                            <option value="언어(어학)" <c:if test="${review.category == '언어(어학)'}">selected</c:if>>언어(어학)</option>
+                            <option value="인문과학" <c:if test="${review.category == '인문과학'}">selected</c:if>>인문과학</option>
+                            <option value="사회과학" <c:if test="${review.category == '사회과학'}">selected</c:if>>사회과학</option>
+                            <option value="자연과학" <c:if test="${review.category == '자연과학'}">selected</c:if>>자연과학</option>
                             <option value="기타" <c:if test="${review.category == '기타'}">selected</c:if>>기타</option>
                         </select>
                     </div>
@@ -64,10 +62,10 @@
                             <option value="99">선택</option>
                             <option value="5" <c:if test="${review.reviewScore == '5' }">selected</c:if>>★★★★★</option>
                             <option value="4" <c:if test="${review.reviewScore == '4' }">selected</c:if>>★★★★☆</option>
-                            <option value="3" <c:if test="${review.reviewScore == 3} || ${review.reviewScore == '3' }">selected</c:if>>★★★☆☆</option>
-                            <option value="2" <c:if test="${review.reviewScore == 2} || ${review.reviewScore == '2' }">selected</c:if>>★★☆☆☆</option>
-                            <option value="1" <c:if test="${review.reviewScore == 1} || ${review.reviewScore == '1' }">selected</c:if>>★☆☆☆☆</option>
-                            <option value="0" <c:if test="${review.reviewScore == 0} || ${review.reviewScore == '0' }">selected</c:if>>☆☆☆☆☆</option>
+                            <option value="3" <c:if test="${review.reviewScore == '3'}">selected</c:if>>★★★☆☆</option>
+                            <option value="2" <c:if test="${review.reviewScore == '2'}">selected</c:if>>★★☆☆☆</option>
+                            <option value="1" <c:if test="${review.reviewScore == '1'}">selected</c:if>>★☆☆☆☆</option>
+                            <option value="0" <c:if test="${review.reviewScore == '0'}">selected</c:if>>☆☆☆☆☆</option>
                         </select>
                     </div>
                 </div>

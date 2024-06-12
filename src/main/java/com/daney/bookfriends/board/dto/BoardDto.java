@@ -1,8 +1,10 @@
 package com.daney.bookfriends.board.dto;
 
+import com.daney.bookfriends.reply.dto.ReplyDto;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 public class BoardDto {
@@ -14,4 +16,5 @@ public class BoardDto {
     private int likeCount;
     private String memberID;
     private Timestamp postDate;
+    private List<ReplyDto> replies;
 }

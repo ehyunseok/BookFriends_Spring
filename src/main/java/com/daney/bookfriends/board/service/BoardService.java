@@ -5,10 +5,15 @@ import com.daney.bookfriends.board.repository.BoardRepository;
 import com.daney.bookfriends.entity.Board;
 import com.daney.bookfriends.entity.Member;
 import com.daney.bookfriends.entity.Reply;
+import com.daney.bookfriends.reply.dto.ReplyDto;
 import com.daney.bookfriends.reply.repository.ReplyRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,8 +22,8 @@ import org.springframework.stereotype.Service;
 import com.daney.bookfriends.Member.repository.MemberRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -35,18 +40,8 @@ public class BoardService {
     @Autowired
     private ReplyRepository replyRepository;
 
-
-    // [메인페이지] 상위 5개의 게시글 리스트불러오기 메소드
-    public List<BoardDto> getTop5Boards() {
-        List<Board> boards = boardRepository.findTop5ByOrderByLikeCountDesc();
-        return boards.stream()
-                .map(board -> modelMapper.map(board, BoardDto.class))
-                .collect(Collectors.toList());
-    }
-
-
-
     // 모든 게시글 리스트 가져오기
+    @Cacheable(value = "boardList", key = "#page + '-' + #size + '-' + #postCategory + '-' + #searchType + '-' + #search")
     public Page<Board> getFilteredPosts(int page, int size, String postCategory, String searchType, String search) {
         Pageable pageable;
 
@@ -70,6 +65,7 @@ public class BoardService {
     }
 
     // 게시글 작성하기
+    @CacheEvict(value = "boardList", allEntries = true)
     public Board registPost(BoardDto boardDto, String memberID) {
 
         // model mapper 라이브러리를 통해 BoardDto 객체를 Board 엔티티 객체로 변환
@@ -86,6 +82,7 @@ public class BoardService {
     }
 
     //게시글 상세페이지 보기
+    @Cacheable(value = "board", key = "#postID")
     @Transactional
     public Board getPostById(Integer postID) {
         Board board = boardRepository.findById(postID)
@@ -93,10 +90,15 @@ public class BoardService {
 
         board.setViewCount(board.getViewCount() + 1);   // 조회수 1씩 증가
 
+        // Lazy-loaded 컬렉션 초기화
+        Hibernate.initialize(board.getReplies());
+
+
         return board;
     }
 
     //게시글 수정하기
+    @CachePut(value = "board", key = "#postID")
     @Transactional
     public void updatePost(Integer postID, BoardDto boardDto, String memberID) {
         Board existingBoard = boardRepository.findById(postID)
@@ -116,12 +118,14 @@ public class BoardService {
     }
 
     //게시글 삭제
+    @CacheEvict(value = {"board", "boardList"}, allEntries = true)
     public void deletePost(Integer postID) {
         boardRepository.deleteById(postID);
     }
 
 
     // 댓글 달기
+    @CacheEvict(value = "board", key = "#postID")
     public Reply addReply(Integer postID, String replyContent, String memberID) {
 
         Reply reply = new Reply();
@@ -140,6 +144,7 @@ public class BoardService {
     }
 
     //댓글 수정하기
+    @CacheEvict(value = "board", key = "#postID")
     public void updateReply(Integer replyID, String replyContent, String memberID) {
         Reply reply = replyRepository.findById(replyID)
                 .orElseThrow(()->new IllegalArgumentException("Invalid replyID:" + replyID));
@@ -151,6 +156,7 @@ public class BoardService {
     }
 
     // 댓글 삭제
+    @CacheEvict(value = "board", key = "#postID")
     public void deleteReply(Integer replyID) {
         replyRepository.deleteById(replyID);
     }

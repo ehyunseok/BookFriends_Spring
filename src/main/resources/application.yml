@@ -1,13 +1,24 @@
 spring:
+  #application
   application:
     name: bookfriends
+  #config
   config:
     import: "classpath:api-key.yml"
+  #Data
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cache:
+    type: redis
+  #Datasource
   datasource:
     url: jdbc:mysql://localhost:3306/bookfriends
     username: root
     password: mysql
     driver-class-name: com.mysql.cj.jdbc.Driver
+  #JPA
   jpa:
     hibernate:
       ddl-auto: validate
@@ -17,10 +28,13 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+    open-in-view: true
+  #mvc
   mvc:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
+  #mail
   mail:
     host: smtp.gmail.com
     port: 587
@@ -32,15 +46,16 @@ spring:
           auth: true
           starttls:
             enable: true
+  #devtools
   devtools:
     restart:
-      enable: true
+      enabled: true
     livereload:
-      enable: true
+      enabled: true
+  #web
   web:
     resources:
       static-locations: file:///C:/BookFriends/uploads/
-
 # 로그
 logging:
   level:

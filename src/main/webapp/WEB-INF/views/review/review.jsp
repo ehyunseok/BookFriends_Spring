@@ -21,11 +21,9 @@
         <select name="category" class="form-control mx-1 mt-2">
             <option value="전체" ${param.category == '전체' ? 'selected' : ''}>전체</option>
             <option value="문학" ${param.category == '문학' ? 'selected' : ''}>문학</option>
-            <option value="사회" ${param.category == '사회' ? 'selected' : ''}>사회</option>
-            <option value="과학" ${param.category == '과학' ? 'selected' : ''}>과학</option>
-            <option value="예술" ${param.category == '예술' ? 'selected' : ''}>예술</option>
-            <option value="역사" ${param.category == '역사' ? 'selected' : ''}>역사</option>
-            <option value="언어(어학)" ${param.category == '언어(어학)' ? 'selected' : ''}>언어(어학)</option>
+            <option value="인문과학" ${param.category == '인문과학' ? 'selected' : ''}>인문과학</option>
+            <option value="사회과학" ${param.category == '사회과학' ? 'selected' : ''}>사회과학</option>
+            <option value="자연과학" ${param.category == '자연과학' ? 'selected' : ''}>자연과학</option>
             <option value="기타" ${param.category == '기타' ? 'selected' : ''}>기타</option>
         </select>
         <select name="searchType" class="form-control mx-1 mt-2">
