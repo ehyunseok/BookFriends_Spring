@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Getter
@@ -11,7 +12,8 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "review")
 @DynamicInsert
-public class Review {
+public class Review implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

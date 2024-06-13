@@ -23,13 +23,13 @@ $(document).ready(function () {
                     $('#memberIDFeedback').text('사용 가능한 아이디입니다.').css('color', 'green');
                 }
             },
-            error: function () {
+            error: function (xhr, status, error) {
+                console.error("Error: " + error);
                 $('#memberIDFeedback').text('아이디 중복 확인 중 오류가 발생했습니다.').css('color', 'red');
             }
         });
     });
 
-    // 인증 코드 전송 버튼 클릭 시
     $('#sendCodeBtn').click(function () {
         var memberEmail = $('#memberEmail').val();
         if (!memberEmail) {
@@ -48,13 +48,13 @@ $(document).ready(function () {
                 alert('인증 코드가 전송되었습니다.');
                 $('#verificationSection').show();
             },
-            error: function () {
+            error: function (xhr, status, error) {
+                console.error("Error: " + error);
                 $('#authCodeFeedback').text('인증 코드 전송 중 오류가 발생했습니다.').css('color', 'red');
             }
         });
     });
 
-    // 인증 확인 버튼 클릭 시
     $('#verifyCodeBtn').click(function () {
         var memberEmail = $('#memberEmail').val();
         var authCode = $('#verificationCode').val();
@@ -78,13 +78,13 @@ $(document).ready(function () {
                     sessionStorage.removeItem('emailVerified');
                 }
             },
-            error: function () {
+            error: function (xhr, status, error) {
+                console.error("Error: " + error);
                 alert('인증 코드 확인 중 오류가 발생했습니다.');
             }
         });
     });
 
-    // 폼 제출 시
     $('form').submit(function(event) {
         var memberID = $('#memberID').val();
         var memberPassword = $('#memberPassword').val();

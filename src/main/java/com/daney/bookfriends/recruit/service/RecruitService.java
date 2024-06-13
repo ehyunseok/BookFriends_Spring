@@ -9,8 +9,12 @@ import com.daney.bookfriends.recruit.dto.RecruitDto;
 import com.daney.bookfriends.recruit.repository.RecruitRepository;
 import com.daney.bookfriends.reply.repository.ReplyRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +36,7 @@ public class RecruitService {
     private ReplyRepository replyRepository;
 
     // 모집 메인 리스트
+    @Cacheable(value = "recruits", key = "#page + '-' + #size + '-' + #recruitStatus + '-' + #searchType + '-' + #search")
     public Page<Recruit> getFilteredRecruits(int page, int size, String recruitStatus, String searchType, String search) {
 
         Pageable pageable;
@@ -54,6 +59,7 @@ public class RecruitService {
 
 
     // 모집글 작성하기
+    @CacheEvict(value = "recruits", allEntries = true)
     public Recruit registRecruit(RecruitDto recruitDto, String memberID) {
         Recruit recruit = modelMapper.map(recruitDto, Recruit.class);
 
@@ -65,17 +71,26 @@ public class RecruitService {
     }
 
     // 모집글 상세페이지
-    @Transactional
+    @Cacheable(value = "recruit", key = "#recruitID")
+    @Transactional(readOnly = true)
     public Recruit getRecruitID(Integer recruitID) {
         Recruit recruit = recruitRepository.findById(recruitID)
-                .orElseThrow(()->new IllegalArgumentException("Invalid RecuritID: "+ recruitID));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid RecruitID: " + recruitID));
         recruit.setViewCount(recruit.getViewCount() + 1);
+
+        // Hibernate.initialize를 사용하여 지연 로딩된 컬렉션 초기화
+        if (recruit.getReplies() != null) {
+            Hibernate.initialize(recruit.getReplies());
+        }
+
         return recruit;
     }
 
     // 모집글 수정하기
+    @CacheEvict(value = {"recruits", "recruit"}, allEntries = true)
+    @CachePut(value = "recruit", key = "#recruitID")
     @Transactional
-    public void updateRecruit(Integer recruitID, RecruitDto recruitDto, String memberID) {
+    public Recruit updateRecruit(Integer recruitID, RecruitDto recruitDto, String memberID) {
         Recruit existingRecruit = recruitRepository.findById(recruitID)
                 .orElseThrow(()->new IllegalArgumentException("Invalid RecruitID: "+ recruitID));
 
@@ -87,15 +102,17 @@ public class RecruitService {
         existingRecruit.setRecruitTitle(recruitDto.getRecruitTitle());
         existingRecruit.setRecruitContent(recruitDto.getRecruitContent());
 
-        recruitRepository.save(existingRecruit);
+        return recruitRepository.save(existingRecruit);
     }
 
     // 모집글 삭제
+    @CacheEvict(value = {"recruits", "recruit"}, allEntries = true)
     public void deleteRecruit(Integer recruitID) {
         recruitRepository.deleteById(recruitID);
     }
 
     //댓글 달기
+    @CacheEvict(value = "recruit", key = "#recruitID")
     public Reply addReply(Integer recruitID, String replyContent, String memberID) {
         Reply reply = new Reply();
 
@@ -112,17 +129,21 @@ public class RecruitService {
     }
 
     //댓글 수정하기
-    public void updateReply(Integer replyID, String replyContent, String memberID) {
+    @CacheEvict(value = {"recruit", "reply"}, allEntries = true)
+    @CachePut(value = "reply", key = "#replyID")
+    public Reply updateReply(Integer replyID, String replyContent, String memberID) {
         Reply reply = replyRepository.findById(replyID)
                 .orElseThrow(()->new IllegalArgumentException("Invalid replyID:" + replyID));
         if(!reply.getMember().getMemberID().equals(memberID)){
             throw new SecurityException("작성자만 수정할 수 있습니다.");
         }
         reply.setReplyContent(replyContent);
-        replyRepository.save(reply);
+        return replyRepository.save(reply);
     }
 
     //댓글 삭제하기
+    @CacheEvict(value = {"recruit", "reply"},allEntries = true)
+    @Transactional
     public void deleteReply(Integer replyID) {
         replyRepository.deleteById(replyID);
     }

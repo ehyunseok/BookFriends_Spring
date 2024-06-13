@@ -5,8 +5,13 @@ import com.daney.bookfriends.entity.Member;
 import com.daney.bookfriends.entity.Review;
 import com.daney.bookfriends.review.dto.ReviewDto;
 import com.daney.bookfriends.review.repository.ReviewRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ReviewService {
 
@@ -27,16 +33,8 @@ public class ReviewService {
     @Autowired
     private MemberRepository memberRepository;
 
-
-    //상위 추천 글 5개 불러오기(Home으로????)
-//    public List<ReviewDto> getTop5Reviews() {
-//        List<Review> reviews = reviewRepository.findTop5ByOrderByLikeCountDesc();
-//        return reviews.stream()
-//                .map(review -> modelMapper.map(review, ReviewDto.class))
-//                .collect(Collectors.toList());
-//    }
-
     // 모든 리뷰 리스트
+    @Cacheable(value = "reviewList", key = "'page-' + #page + '-size-' + #size + '-category-' + #category + '-searchType-' + #searchType + '-search-' + #search")
     public Page<Review> getFilteredReviews(int page, int size, String category, String searchType, String search) {
         Pageable pageable;
 
@@ -47,7 +45,7 @@ public class ReviewService {
                 break;
             case "추천순":
                 pageable = PageRequest
-                        .of(page -1, size, Sort.by("likeCount").ascending());
+                        .of(page -1, size, Sort.by("likeCount").descending());
                 break;
             default:
                 pageable = PageRequest
@@ -63,6 +61,7 @@ public class ReviewService {
     }
 
     // 리뷰 작성하기
+    @CacheEvict(value = "reviewList", allEntries = true)
     public Review registReview(ReviewDto reviewDto, String memberID) {
         
         Review review = modelMapper.map(reviewDto, Review.class);
@@ -74,22 +73,31 @@ public class ReviewService {
     }
 
     //리뷰 상세페이지
+    @Cacheable(value = "review", key = "#reviewID")
     @Transactional
     public Review getReviewById(Integer reviewID) {
-        Review review = reviewRepository.findById(reviewID)
-                .orElseThrow(()-> new IllegalArgumentException("Invalid review ID: " + reviewID));
+        try {
+            Review review = reviewRepository.findById(reviewID)
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid review ID: " + reviewID));
 
-        review.setViewCount(review.getViewCount() + 1);
-        return review;
+            review.setViewCount(review.getViewCount() + 1);
+
+            return review;
+        } catch (IllegalArgumentException e) {
+            log.error("Error retrieving review: {}", e.getMessage());
+            return null;
+        }
     }
 
     //서평 수정
+    @CacheEvict(value = {"reviewList", "review"}, allEntries = true)
+    @CachePut(value = "review", key = "#reviewID")
     @Transactional
-    public void updateReview(Integer reviewID, ReviewDto reviewDto, String memberID) {
+    public Review updateReview(Integer reviewID, ReviewDto reviewDto, String memberID) {
         Review existingReview = reviewRepository.findById(reviewID)
-                .orElseThrow(()-> new IllegalArgumentException("Invalid review ID: " + reviewID));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid review ID: " + reviewID));
 
-        if(!existingReview.getMember().getMemberID().equals(memberID)) {
+        if (!existingReview.getMember().getMemberID().equals(memberID)) {
             throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
         }
 
@@ -101,10 +109,12 @@ public class ReviewService {
         existingReview.setReviewContent(reviewDto.getReviewContent());
         existingReview.setReviewScore(reviewDto.getReviewScore());
 
-        reviewRepository.save(existingReview);
+        return reviewRepository.save(existingReview);
     }
 
+
     // 서평 삭제
+    @CacheEvict(value = {"review", "reviewList"}, allEntries = true)
     @Transactional
     public void deleteReview(Integer reviewID) {
         reviewRepository.deleteById(reviewID);

@@ -115,8 +115,10 @@ public class ReviewController {
     public String updateReview(@PathVariable("reviewID") Integer reviewID,
                                @ModelAttribute("review") ReviewDto reviewDto, Principal principal){
         reviewService.updateReview(reviewID, reviewDto, principal.getName());
+        log.debug("Updated review with ID: {}", reviewID);
         return "redirect:/review/post/" + reviewID;
     }
+
 
     // 서평 삭제
     @DeleteMapping("/delete/{reviewID}")

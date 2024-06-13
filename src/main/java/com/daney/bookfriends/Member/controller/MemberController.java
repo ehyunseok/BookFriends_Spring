@@ -1,19 +1,20 @@
 package com.daney.bookfriends.Member.controller;
 
 import com.daney.bookfriends.Member.service.EmailService;
-import com.daney.bookfriends.jwts.JwtService;
+import com.daney.bookfriends.jwt.JwtService;
 import com.daney.bookfriends.Member.dto.MemberDto;
 import com.daney.bookfriends.Member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Slf4j
 @Controller
@@ -30,12 +31,12 @@ public class MemberController {
     private EmailService emailService;
 
 
-// 회원가입
+    // 회원가입
     // 회원가입 페이지 경로
     @GetMapping("/join")
     public String join() {
-    return "member/join";
-}
+        return "member/join";
+    }
 
     // 아이디 중복 검사
     @GetMapping("/checkMemberID")
@@ -47,9 +48,11 @@ public class MemberController {
     // 이메일로 인증 코드 발송 요청 처리
     @PostMapping("/sendVerificationCode")
     @ResponseBody
-    public String sendVerificationCode(@RequestParam String memberEmail){
+    public Map<String, String> sendVerificationCode(@RequestParam String memberEmail){
         emailService.sendVerificationCode(memberEmail);
-        return "Verification code sent";
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Verification code sent");
+        return response;
     }
 
     // 인증 코드 확인 요청 처리
@@ -97,7 +100,7 @@ public class MemberController {
 
 
 
-// 로그인
+    // 로그인
     @GetMapping("/login")
     public String loginForm() {
         return "member/login";
@@ -129,7 +132,7 @@ public class MemberController {
             return "member/login";  // 로그인 실패 시 로그인 페이지로 돌아감
         }
     }
-    
+
 
 // 로그아웃은 spring security로 처리~~(SecurityConfig)
 

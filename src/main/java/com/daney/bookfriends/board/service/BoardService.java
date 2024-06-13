@@ -5,7 +5,6 @@ import com.daney.bookfriends.board.repository.BoardRepository;
 import com.daney.bookfriends.entity.Board;
 import com.daney.bookfriends.entity.Member;
 import com.daney.bookfriends.entity.Reply;
-import com.daney.bookfriends.reply.dto.ReplyDto;
 import com.daney.bookfriends.reply.repository.ReplyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
@@ -22,7 +21,7 @@ import org.springframework.stereotype.Service;
 import com.daney.bookfriends.Member.repository.MemberRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 
 @Slf4j
@@ -98,9 +97,10 @@ public class BoardService {
     }
 
     //게시글 수정하기
+    @CacheEvict(value = {"boardList", "board"}, allEntries = true)
     @CachePut(value = "board", key = "#postID")
     @Transactional
-    public void updatePost(Integer postID, BoardDto boardDto, String memberID) {
+    public Board updatePost(Integer postID, BoardDto boardDto, String memberID) {
         Board existingBoard = boardRepository.findById(postID)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid post ID: " + postID));
 
@@ -114,7 +114,7 @@ public class BoardService {
         existingBoard.setPostTitle(boardDto.getPostTitle());
         existingBoard.setPostContent(boardDto.getPostContent());
 
-        boardRepository.save(existingBoard);
+        return boardRepository.save(existingBoard);
     }
 
     //게시글 삭제
@@ -144,20 +144,23 @@ public class BoardService {
     }
 
     //댓글 수정하기
-    @CacheEvict(value = "board", key = "#postID")
-    public void updateReply(Integer replyID, String replyContent, String memberID) {
+    @CacheEvict(value = {"board", "reply"}, allEntries = true)
+    @CachePut(value = "reply", key = "#replyID")    // 댓글을 수정할 때 캐시를 갱신함
+    public Reply updateReply(Integer replyID, String replyContent, String memberID) {
         Reply reply = replyRepository.findById(replyID)
                 .orElseThrow(()->new IllegalArgumentException("Invalid replyID:" + replyID));
         if(!reply.getMember().getMemberID().equals(memberID)){
             throw new SecurityException("작성자만 수정할 수 있습니다.");
         }
         reply.setReplyContent(replyContent);
-        replyRepository.save(reply);
+        return replyRepository.save(reply);
     }
 
     // 댓글 삭제
-    @CacheEvict(value = "board", key = "#postID")
+    @CacheEvict(value = {"board", "reply"}, allEntries = true)
+    @Transactional
     public void deleteReply(Integer replyID) {
         replyRepository.deleteById(replyID);
     }
+
 }

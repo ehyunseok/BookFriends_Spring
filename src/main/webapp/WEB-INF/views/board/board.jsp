@@ -79,7 +79,7 @@
                     <tr class="clickable-row" onclick="window.location.href='${pageContext.request.contextPath}/board/post/${board.postID}'" style="cursor: pointer;">
                         <td class="id">${board.postID}</td>
                         <td class="category">${board.postCategory}</td>
-                        <td class="title">${board.postTitle} <small>(추천: ${board.likeCount})</small></td>
+                        <td class="title">${board.postTitle} <img class="mb-1" src="${pageContext.request.contextPath}/images/bubble-Icon.png" style="height: 20px;"><small>${board.replies.size()}</small></td>
                         <td class="author">${board.member.memberID}</td>
                         <td class="date post-date" data-post-date="${board.postDate}"></td>
                         <td class="viewCount">${board.viewCount}</td>

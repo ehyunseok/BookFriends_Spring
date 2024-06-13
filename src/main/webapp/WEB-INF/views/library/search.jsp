@@ -15,7 +15,7 @@
 
 <!-- container  -->
 <section class="container search-container mt-3 mb-5">
-    <span class="text-left" id="pageInfo"><h2>도서관 검색</h2></span>
+    <span class="text-left" id="pageInfo"><h2>국립중앙도서관 소장자료 검색</h2></span>
     <div class="row">
         <form action="${pageContext.request.contextPath}/library/search" method="get" class="col-sm-12">
             <input type="text" name="query" class="form-control" placeholder="검색어를 입력하세요" required>

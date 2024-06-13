@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "likey")
 @IdClass(LikeyId.class)
-public class Likey {
+public class Likey implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "memberID", nullable = false)

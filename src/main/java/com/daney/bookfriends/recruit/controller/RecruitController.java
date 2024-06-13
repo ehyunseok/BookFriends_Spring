@@ -37,7 +37,7 @@ public class RecruitController {
                                  @RequestParam(defaultValue = "전체") String recruitStatus,
                                  @RequestParam(defaultValue = "최신순") String searchType,
                                  @RequestParam(defaultValue = "") String search,
-                                    Model model) {
+                                 Model model) {
         Page<Recruit> recruits = recruitService.getFilteredRecruits(page, size, recruitStatus, searchType, search);
         model.addAttribute("recruits", recruits);
         model.addAttribute("currentPage", page);

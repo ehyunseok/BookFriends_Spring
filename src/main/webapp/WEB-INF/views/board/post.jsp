@@ -58,7 +58,7 @@
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <input type="hidden" name="_method" value="DELETE">
                         </form>
-                        <a style="color: gray;" onclick="if(confirm('삭제하시겠습니까?')) { document.getElementById('deleteForm').submit(); }">삭제</a>
+                        <a style="color: gray; cursor: pointer;" onclick="if(confirm('삭제하시겠습니까?')) { document.getElementById('deleteForm').submit(); }">삭제</a>
                     </c:if>
                 </div>
             </div>
@@ -103,11 +103,11 @@
                                 <a class="like-button" style="color: black;" data-item-cate="board" data-item-type="Reply" data-item-id="${reply.replyID}" data-member-id="${currentMemberID}" href="javascript:void(0);">추천(${reply.likeCount})</a>
                                 <c:if test="${currentMemberID == reply.member.memberID}">
                                     | <a style="color: gray;" onclick="return confirm('수정하시겠습니까?')" data-toggle="modal" href="#updateReplyModal${reply.replyID}">수정</a> |
-                                    <form id="deleteReplyForm${reply.replyID}" action="${pageContext.request.contextPath}/board/deleteReply/${board.postID}/${reply.replyID}" method="post" style="display:none;">
+                                   <form id="deleteReplyForm${reply.replyID}" action="${pageContext.request.contextPath}/board/deleteReply/${board.postID}/${reply.replyID}" method="post" style="display:none;">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                                    </form>
-                                    <a style="color: gray;" onclick="if(confirm('삭제하시겠습니까?')) { document.getElementById('deleteReplyForm${reply.replyID}').submit(); }">삭제</a>
+                                   </form>
+                                   <a style="color: gray; cursor: pointer;" onclick="if(confirm('삭제하시겠습니까?')) { document.getElementById('deleteReplyForm${reply.replyID}').submit(); }">삭제</a>
                                 </c:if>
                             </div>
                         </li>
@@ -146,6 +146,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- Include dateFormatter.js -->
 <script src="${pageContext.request.contextPath}/js/dateFormatter.js"></script>

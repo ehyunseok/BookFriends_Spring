@@ -3,7 +3,7 @@ package com.daney.bookfriends.Member.service;
 import com.daney.bookfriends.entity.Member;
 import com.daney.bookfriends.Member.dto.MemberDto;
 import com.daney.bookfriends.Member.repository.MemberRepository;
-import com.daney.bookfriends.jwts.JwtService;
+import com.daney.bookfriends.jwt.JwtService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

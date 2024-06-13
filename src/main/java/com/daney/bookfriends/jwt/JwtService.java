@@ -1,4 +1,4 @@
-package com.daney.bookfriends.jwts;
+package com.daney.bookfriends.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

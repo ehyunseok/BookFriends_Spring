@@ -6,6 +6,9 @@ import com.daney.bookfriends.reply.repository.ReplyRepository;
 import com.daney.bookfriends.likey.repository.LikeyRepository;
 import com.daney.bookfriends.review.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -25,7 +28,15 @@ public class LikeyService {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     // 추천 기능
+    @Caching(evict = {
+            @CacheEvict(value = "board", key = "#itemID", condition = "#itemType == T(com.daney.bookfriends.entity.ItemType).POST"),
+            @CacheEvict(value = "reply", key = "#itemID", condition = "#itemType == T(com.daney.bookfriends.entity.ItemType).REPLY"),
+            @CacheEvict(value = "review", key = "#itemID", condition = "#itemType == T(com.daney.bookfriends.entity.ItemType).REVIEW")
+    })
     public boolean toggleLike(String memberID, ItemType itemType, Integer itemID){
         LikeyId likeyId = new LikeyId(memberID, itemType, itemID);
         Optional<Likey> optionalLikey = likeyRepository.findById(likeyId);
@@ -47,7 +58,12 @@ public class LikeyService {
 
     
     // 추천 수 업데이트 메소드
-    private void updateLikeCount(ItemType itemType, Integer itemID, int delta) {
+    @Caching(evict = {
+            @CacheEvict(value = "board", key = "#itemID", condition = "#itemType == T(com.daney.bookfriends.entity.ItemType).POST"),
+            @CacheEvict(value = "reply", key = "#itemID", condition = "#itemType == T(com.daney.bookfriends.entity.ItemType).REPLY"),
+            @CacheEvict(value = "review", key = "#itemID", condition = "#itemType == T(com.daney.bookfriends.entity.ItemType).REVIEW")
+    })
+    public void updateLikeCount(ItemType itemType, Integer itemID, int delta) {
         if (itemType == ItemType.POST) {    // 자유게시판 게시글 추천
             Optional<Board> optionalBoard = boardRepository.findById(itemID);
             if (optionalBoard.isPresent()) {
@@ -70,5 +86,10 @@ public class LikeyService {
                 reviewRepository.save(review);
             }
         }
+    }
+
+    private void updateCache(String cacheName, Integer itemID, Object entity) {
+        String cacheKey = cacheName + "::" + itemID;
+        redisTemplate.opsForValue().set(cacheKey, entity);
     }
 }

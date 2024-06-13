@@ -24,12 +24,12 @@
                 <button type="submit" class="btn btn-secondary form-control">로그아웃</button>
             </form>
             <div class="row justify-content-center mt-3">
-                <button type="button" class="btn btn-warning mr-1"  onclick=window.location.href="${pageContext.request.contextPath}/review">서평</button>
-                <button type="button" class="btn btn-warning mr-1" onclick=window.location.href='${pageContext.request.contextPath}/library/recommended'>추천도서</button>
-                <button type="button" class="btn btn-warning mr-1" onclick=window.location.href='${pageContext.request.contextPath}/library/search'>도서 검색</button>
-                <button type="button" class="btn btn-warning mr-1" onclick=window.location.href='${pageContext.request.contextPath}/board'>자유게시판</button>
-                <button type="button" class="btn btn-warning mr-1"  onclick=window.location.href="${pageContext.request.contextPath}/recruit">독서모임</button>
-                <button type="button" class="btn btn-warning" onclick=window.location.href='${pageContext.request.contextPath}/chat'>채팅</button>
+                <button type="button" class="btn btn-warning m-1"  onclick=window.location.href="${pageContext.request.contextPath}/review">서평</button>
+                <button type="button" class="btn btn-warning m-1" onclick=window.location.href='${pageContext.request.contextPath}/library/recommended'>추천도서</button>
+                <button type="button" class="btn btn-warning m-1" onclick=window.location.href='${pageContext.request.contextPath}/library/search'>도서검색</button>
+                <button type="button" class="btn btn-warning m-1" onclick=window.location.href='${pageContext.request.contextPath}/board'>게시판</button>
+                <button type="button" class="btn btn-warning m-1"  onclick=window.location.href="${pageContext.request.contextPath}/recruit">독서모임</button>
+                <button type="button" class="btn btn-warning m-1" onclick=window.location.href='${pageContext.request.contextPath}/chat'>채팅</button>
             </div>
         </div>
     </div>

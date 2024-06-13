@@ -13,9 +13,6 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Integer> {
 
-    // 상위 5개의 인기 게시글을 가져오는 메서드
-    List<Board> findTop5ByOrderByLikeCountDesc();
-
     @Query("SELECT b FROM Board b " +
             "WHERE b.postTitle LIKE %:search% " +
             "OR b.postContent LIKE %:search% " +

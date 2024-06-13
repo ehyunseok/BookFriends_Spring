@@ -197,10 +197,11 @@ public class BoardController {
 
     //댓글 삭제
     @DeleteMapping("/deleteReply/{postID}/{replyID}")
-    public String deleteReply(@PathVariable("replyID") Integer replyID, @PathVariable("postID") Integer postID){
+    public String deleteReply(@PathVariable("replyID") Integer replyID, @PathVariable("postID") Integer postID) {
         boardService.deleteReply(replyID);
         return "redirect:/board/post/" + postID;
     }
+
 
     // 게시글 추천하기
     @PostMapping("/likePost/{postID}")

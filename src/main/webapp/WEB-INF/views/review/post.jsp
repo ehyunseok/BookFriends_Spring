@@ -75,7 +75,7 @@
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                             <input type="hidden" name="_method" value="DELETE">
                         </form>
-                        <a style="color: gray;" onclick="if(confirm('삭제하시겠습니까?')) { document.getElementById('deleteForm').submit(); }">삭제</a>
+                        <a style="color: gray; cursor: pointer;" onclick="if(confirm('삭제하시겠습니까?')) { document.getElementById('deleteForm').submit(); }">삭제</a>
                     </c:if>
                 </div>
             </div>

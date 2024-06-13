@@ -1,9 +1,12 @@
 package com.daney.bookfriends.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisScriptingCommands;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -14,8 +17,20 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableCaching  // 캐시 추상화 활성화
 public class RedisConfig {
 
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() { //Redis와 연결을 생성하고 관리하는 인터페이스
+
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setHostName(redisHost);
+        config.setPort(redisPort);
+
+
         return new LettuceConnectionFactory();
         /*Lettuce는 Redis 클라이언트 라이브러리. 비동기 및 동기 방식 모두 지원
           이 클래스는 Lettuce를 사용하여 Redis 연결을 생성함 */
@@ -23,7 +38,7 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() { // Redis에 데이터를 저장하고 가져오는 템플릿 클래스
-        // redis에 데이터를 젖아하고 가져오는 템플릿 클래스. 다양한 redis 데이터 타입을 다룰 수 있다.
+        // redis에 데이터를 저장하고 가져오는 템플릿 클래스. 다양한 redis 데이터 타입을 다룰 수 있다.
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         // 이 템플릿이 redis와 통신할 때 사용할 연결 팩토리를 설정함
         template.setConnectionFactory(redisConnectionFactory());
