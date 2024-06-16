@@ -26,4 +26,6 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
             "OR b.member.memberID " +
             "LIKE %:search%)")
     Page<Board> findByCategoryAndTitleOrContentOrMember(@Param("postCategory") String postCategory, @Param("search") String search, Pageable pageable);
+
+
 }

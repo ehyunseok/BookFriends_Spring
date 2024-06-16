@@ -43,7 +43,6 @@ public class BoardService {
     @Cacheable(value = "boardList", key = "#page + '-' + #size + '-' + #postCategory + '-' + #searchType + '-' + #search")
     public Page<Board> getFilteredPosts(int page, int size, String postCategory, String searchType, String search) {
         Pageable pageable;
-
         switch (searchType) {
             case "조회수순":
                 pageable = PageRequest.of(page - 1, size, Sort.by("viewCount").descending());
@@ -64,7 +63,6 @@ public class BoardService {
     }
 
     // 게시글 작성하기
-    @CacheEvict(value = "boardList", allEntries = true)
     public Board registPost(BoardDto boardDto, String memberID) {
 
         // model mapper 라이브러리를 통해 BoardDto 객체를 Board 엔티티 객체로 변환
@@ -75,7 +73,7 @@ public class BoardService {
         Member member = memberRepository.findById(memberID)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + memberID));
         board.setMember(member);
-        
+
         // Board 엔티티를 db에 저장함
         return boardRepository.save(board);
     }
@@ -89,16 +87,17 @@ public class BoardService {
 
         board.setViewCount(board.getViewCount() + 1);   // 조회수 1씩 증가
 
-        // Lazy-loaded 컬렉션 초기화
-        Hibernate.initialize(board.getReplies());
+        // 정렬된 댓글 리스트 설정
+        List<Reply> sortedReplies = replyRepository.findRepliesByBoardIdOrderByReplyDateDesc(postID);
+        board.setReplies(sortedReplies);
 
+        // 로그 출력
+        sortedReplies.forEach(reply -> log.info("Reply ID: {}, Reply Date: {}", reply.getReplyID(), reply.getReplyDate()));
 
         return board;
     }
 
     //게시글 수정하기
-    @CacheEvict(value = {"boardList", "board"}, allEntries = true)
-    @CachePut(value = "board", key = "#postID")
     @Transactional
     public Board updatePost(Integer postID, BoardDto boardDto, String memberID) {
         Board existingBoard = boardRepository.findById(postID)
@@ -108,7 +107,7 @@ public class BoardService {
         if(!existingBoard.getMember().getMemberID().equals(memberID)){
             throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
         }
-        
+
         // 수정할 데이터 설정
         existingBoard.setPostCategory(boardDto.getPostCategory());
         existingBoard.setPostTitle(boardDto.getPostTitle());
@@ -118,14 +117,12 @@ public class BoardService {
     }
 
     //게시글 삭제
-    @CacheEvict(value = {"board", "boardList"}, allEntries = true)
     public void deletePost(Integer postID) {
         boardRepository.deleteById(postID);
     }
 
 
     // 댓글 달기
-    @CacheEvict(value = "board", key = "#postID")
     public Reply addReply(Integer postID, String replyContent, String memberID) {
 
         Reply reply = new Reply();
@@ -144,8 +141,6 @@ public class BoardService {
     }
 
     //댓글 수정하기
-    @CacheEvict(value = {"board", "reply"}, allEntries = true)
-    @CachePut(value = "reply", key = "#replyID")    // 댓글을 수정할 때 캐시를 갱신함
     public Reply updateReply(Integer replyID, String replyContent, String memberID) {
         Reply reply = replyRepository.findById(replyID)
                 .orElseThrow(()->new IllegalArgumentException("Invalid replyID:" + replyID));
@@ -157,8 +152,6 @@ public class BoardService {
     }
 
     // 댓글 삭제
-    @CacheEvict(value = {"board", "reply"}, allEntries = true)
-    @Transactional
     public void deleteReply(Integer replyID) {
         replyRepository.deleteById(replyID);
     }

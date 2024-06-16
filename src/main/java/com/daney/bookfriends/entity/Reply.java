@@ -40,5 +40,4 @@ public class Reply implements Serializable {
 
     @Column(name = "replyDate", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp replyDate;
-
 }

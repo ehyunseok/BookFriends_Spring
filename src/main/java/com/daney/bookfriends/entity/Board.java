@@ -43,6 +43,9 @@ public class Board implements Serializable {
     @Column(name = "postDate")
     private Timestamp postDate;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Reply> replies;
+
+    @Transient
+    private int replyCount;
 }

@@ -40,6 +40,6 @@ public class Recruit implements Serializable {
     @Column(name = "viewCount")
     private Integer viewCount;
 
-    @OneToMany(mappedBy = "recruit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "recruit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Reply> replies;
 }

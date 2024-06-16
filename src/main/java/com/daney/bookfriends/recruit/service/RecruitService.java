@@ -22,6 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class RecruitService {
@@ -38,19 +40,11 @@ public class RecruitService {
     // 모집 메인 리스트
     @Cacheable(value = "recruits", key = "#page + '-' + #size + '-' + #recruitStatus + '-' + #searchType + '-' + #search")
     public Page<Recruit> getFilteredRecruits(int page, int size, String recruitStatus, String searchType, String search) {
-
-        Pageable pageable;
-
-        switch (searchType){
-            case "조회수순":
-                pageable = PageRequest.of(page - 1, size, Sort.by("viewCount").descending());
-                break;
-            default:
-                pageable = PageRequest.of(page - 1, size, Sort.by("registDate").descending());
-                break;
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("registDate").descending());
+        if ("조회수순".equals(searchType)) {
+            pageable = PageRequest.of(page - 1, size, Sort.by("viewCount").descending());
         }
-
-        if("전체".equals(recruitStatus)){
+        if ("전체".equals(recruitStatus)) {
             return recruitRepository.findByTitleOrContentOrMember("%" + search + "%", pageable);
         } else {
             return recruitRepository.findByRecruitStatusAndTitleOrContentOrMember(recruitStatus, "%" + search + "%", pageable);
@@ -59,90 +53,71 @@ public class RecruitService {
 
 
     // 모집글 작성하기
-    @CacheEvict(value = "recruits", allEntries = true)
     public Recruit registRecruit(RecruitDto recruitDto, String memberID) {
         Recruit recruit = modelMapper.map(recruitDto, Recruit.class);
-
-        Member member = memberRepository.findById(memberID)
-                .orElseThrow(()-> new IllegalArgumentException("Invalid member ID: " + memberID));
+        Member member = memberRepository.findById(memberID).orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + memberID));
         recruit.setMember(member);
-
         return recruitRepository.save(recruit);
     }
 
     // 모집글 상세페이지
     @Cacheable(value = "recruit", key = "#recruitID")
-    @Transactional(readOnly = true)
+    @Transactional
     public Recruit getRecruitID(Integer recruitID) {
-        Recruit recruit = recruitRepository.findById(recruitID)
+        Recruit recruit = recruitRepository.findByIdWithReplies(recruitID)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid RecruitID: " + recruitID));
         recruit.setViewCount(recruit.getViewCount() + 1);
 
-        // Hibernate.initialize를 사용하여 지연 로딩된 컬렉션 초기화
-        if (recruit.getReplies() != null) {
-            Hibernate.initialize(recruit.getReplies());
-        }
+        // 정렬된 댓글 리스트 설정
+        List<Reply> sortedReplies = replyRepository.findRepliesByRecruitIdOrderByReplyDateDesc(recruitID);
+        recruit.setReplies(sortedReplies);
 
-        return recruit;
+        // 로그 출력
+        sortedReplies.forEach(reply -> log.info("Reply ID: {}, Reply Date: {}", reply.getReplyID(), reply.getReplyDate()));
+
+        return recruitRepository.save(recruit);
     }
 
+
     // 모집글 수정하기
-    @CacheEvict(value = {"recruits", "recruit"}, allEntries = true)
-    @CachePut(value = "recruit", key = "#recruitID")
     @Transactional
     public Recruit updateRecruit(Integer recruitID, RecruitDto recruitDto, String memberID) {
-        Recruit existingRecruit = recruitRepository.findById(recruitID)
-                .orElseThrow(()->new IllegalArgumentException("Invalid RecruitID: "+ recruitID));
-
-        if(!existingRecruit.getMember().getMemberID().equals(memberID)){
+        Recruit existingRecruit = recruitRepository.findById(recruitID).orElseThrow(() -> new IllegalArgumentException("Invalid RecruitID: " + recruitID));
+        if (!existingRecruit.getMember().getMemberID().equals(memberID)) {
             throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
         }
-
         existingRecruit.setRecruitStatus(recruitDto.getRecruitStatus());
         existingRecruit.setRecruitTitle(recruitDto.getRecruitTitle());
         existingRecruit.setRecruitContent(recruitDto.getRecruitContent());
-
         return recruitRepository.save(existingRecruit);
     }
 
     // 모집글 삭제
-    @CacheEvict(value = {"recruits", "recruit"}, allEntries = true)
     public void deleteRecruit(Integer recruitID) {
         recruitRepository.deleteById(recruitID);
     }
 
-    //댓글 달기
-    @CacheEvict(value = "recruit", key = "#recruitID")
+    // 댓글 달기
     public Reply addReply(Integer recruitID, String replyContent, String memberID) {
         Reply reply = new Reply();
-
-        // 댓글 작성자를 현재 사용자로 설정
         reply.setMember(memberRepository.findByMemberID(memberID));
-
-        // 현재 게시글의 댓글으로 설정
-        Recruit recruit = recruitRepository.findById(recruitID)
-                .orElseThrow(()->new IllegalArgumentException("Invalid recruitID:" + recruitID));
+        Recruit recruit = recruitRepository.findById(recruitID).orElseThrow(() -> new IllegalArgumentException("Invalid recruitID:" + recruitID));
         reply.setRecruit(recruit);
         reply.setReplyContent(replyContent);
-        // Reply entity를 db에 저장
         return replyRepository.save(reply);
     }
 
-    //댓글 수정하기
-    @CacheEvict(value = {"recruit", "reply"}, allEntries = true)
-    @CachePut(value = "reply", key = "#replyID")
+    // 댓글 수정하기
     public Reply updateReply(Integer replyID, String replyContent, String memberID) {
-        Reply reply = replyRepository.findById(replyID)
-                .orElseThrow(()->new IllegalArgumentException("Invalid replyID:" + replyID));
-        if(!reply.getMember().getMemberID().equals(memberID)){
+        Reply reply = replyRepository.findById(replyID).orElseThrow(() -> new IllegalArgumentException("Invalid replyID:" + replyID));
+        if (!reply.getMember().getMemberID().equals(memberID)) {
             throw new SecurityException("작성자만 수정할 수 있습니다.");
         }
         reply.setReplyContent(replyContent);
         return replyRepository.save(reply);
     }
 
-    //댓글 삭제하기
-    @CacheEvict(value = {"recruit", "reply"},allEntries = true)
+    // 댓글 삭제하기
     @Transactional
     public void deleteReply(Integer replyID) {
         replyRepository.deleteById(replyID);

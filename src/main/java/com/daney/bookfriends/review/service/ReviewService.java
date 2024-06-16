@@ -61,7 +61,6 @@ public class ReviewService {
     }
 
     // 리뷰 작성하기
-    @CacheEvict(value = "reviewList", allEntries = true)
     public Review registReview(ReviewDto reviewDto, String memberID) {
         
         Review review = modelMapper.map(reviewDto, Review.class);
@@ -90,8 +89,6 @@ public class ReviewService {
     }
 
     //서평 수정
-    @CacheEvict(value = {"reviewList", "review"}, allEntries = true)
-    @CachePut(value = "review", key = "#reviewID")
     @Transactional
     public Review updateReview(Integer reviewID, ReviewDto reviewDto, String memberID) {
         Review existingReview = reviewRepository.findById(reviewID)
@@ -114,7 +111,6 @@ public class ReviewService {
 
 
     // 서평 삭제
-    @CacheEvict(value = {"review", "reviewList"}, allEntries = true)
     @Transactional
     public void deleteReview(Integer reviewID) {
         reviewRepository.deleteById(reviewID);

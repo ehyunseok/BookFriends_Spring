@@ -1,5 +1,6 @@
 package com.daney.bookfriends.review.repository;
 
+import com.daney.bookfriends.entity.Reply;
 import com.daney.bookfriends.entity.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,5 +37,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
             "OR r.authorName LIKE %:search% " +
             "OR r.publisher LIKE %:search%)")
     Page<Review> findByCategoryAndTitleOrContentOrMemberOrBookNameOrAuthorNameOrPublisher(@Param("category") String category, @Param("search") String search, Pageable pageable);
+
+
 
 }
