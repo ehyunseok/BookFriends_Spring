@@ -34,7 +34,7 @@ public class ReviewService {
     private MemberRepository memberRepository;
 
     // 모든 리뷰 리스트
-    @Cacheable(value = "reviewList", key = "'page-' + #page + '-size-' + #size + '-category-' + #category + '-searchType-' + #searchType + '-search-' + #search")
+    //@Cacheable(value = "reviewList", key = "'page-' + #page + '-size-' + #size + '-category-' + #category + '-searchType-' + #searchType + '-search-' + #search")
     public Page<Review> getFilteredReviews(int page, int size, String category, String searchType, String search) {
         Pageable pageable;
 
@@ -72,7 +72,7 @@ public class ReviewService {
     }
 
     //리뷰 상세페이지
-    @Cacheable(value = "review", key = "#reviewID")
+    //@Cacheable(value = "review", key = "#reviewID")
     @Transactional
     public Review getReviewById(Integer reviewID) {
         try {

@@ -1,5 +1,8 @@
 package com.daney.bookfriends.config;
 
+import jakarta.servlet.Servlet;
+import org.apache.jasper.servlet.JspServlet;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -18,6 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
     public MappingJackson2HttpMessageConverter jsonConverter() {
         return new MappingJackson2HttpMessageConverter();
     }
+
     @Bean
     public MappingJackson2XmlHttpMessageConverter xmlConverter() {
         return new MappingJackson2XmlHttpMessageConverter();
@@ -48,14 +52,15 @@ public class WebConfig implements WebMvcConfigurer {
 
         // 파일 업로드
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:C:/BookFriends/uploads/");
+                .addResourceLocations("file:C:/BookFriends/uploads/")
+                .setCachePeriod(0);  // 캐시 비활성화
 
 
         // 정적 리소스 처리 설정
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/")
-                .setCachePeriod(3600)
-                .resourceChain(true);
+                .setCachePeriod(0)  // 캐시 무효화
+                .resourceChain(false);  // 캐시 체인 비활성화
     }
 
     // 뷰 리졸버 설정 추가
@@ -77,6 +82,12 @@ public class WebConfig implements WebMvcConfigurer {
         return new HiddenHttpMethodFilter();
     }
 
-    
+    //JSP 컴파일러 설정을 명시적으로 추가
+    @Bean
+    public ServletRegistrationBean<Servlet> jspServlet() {
+        ServletRegistrationBean<Servlet> registration = new ServletRegistrationBean<>(new JspServlet(), "*.jsp");
+        registration.setLoadOnStartup(1);
+        return registration;
+    }
 }
 

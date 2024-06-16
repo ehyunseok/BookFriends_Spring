@@ -18,6 +18,12 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+    @Autowired
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -25,20 +31,17 @@ public class SecurityConfig {
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
                 .authorizeHttpRequests(authorize -> authorize
-                        // 로그인 페이지와 관련된 요청, 정적 리소스는 모두 접근 가능하도록 설정
                         .requestMatchers(
                                 "/member/login", "/member/join", "/member/sendVerificationCode", "/member/verifyCode",
                                 "/member/checkMemberID", "/css/**", "/js/**", "/images/**",
-                                "/WEB-INF/views/member/login.jsp",
-                                "/WEB-INF/views/member/join.jsp",
-                                "/WEB-INF/views/index.jsp")
-                        .permitAll()
+                                "/WEB-INF/views/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/member/login")
                         .loginProcessingUrl("/member/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(customAuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -60,4 +63,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

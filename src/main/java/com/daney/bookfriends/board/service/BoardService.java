@@ -40,7 +40,7 @@ public class BoardService {
     private ReplyRepository replyRepository;
 
     // 모든 게시글 리스트 가져오기
-    @Cacheable(value = "boardList", key = "#page + '-' + #size + '-' + #postCategory + '-' + #searchType + '-' + #search")
+    //@Cacheable(value = "boardList", key = "#page + '-' + #size + '-' + #postCategory + '-' + #searchType + '-' + #search")
     public Page<Board> getFilteredPosts(int page, int size, String postCategory, String searchType, String search) {
         Pageable pageable;
         switch (searchType) {
@@ -79,7 +79,7 @@ public class BoardService {
     }
 
     //게시글 상세페이지 보기
-    @Cacheable(value = "board", key = "#postID")
+    //@Cacheable(value = "board", key = "#postID")
     @Transactional
     public Board getPostById(Integer postID) {
         Board board = boardRepository.findById(postID)

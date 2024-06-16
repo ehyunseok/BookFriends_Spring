@@ -12,8 +12,8 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "review")
 @DynamicInsert
-public class Review implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Review /*implements Serializable */{
+//    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

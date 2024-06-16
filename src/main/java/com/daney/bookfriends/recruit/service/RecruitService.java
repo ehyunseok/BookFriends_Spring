@@ -38,7 +38,7 @@ public class RecruitService {
     private ReplyRepository replyRepository;
 
     // 모집 메인 리스트
-    @Cacheable(value = "recruits", key = "#page + '-' + #size + '-' + #recruitStatus + '-' + #searchType + '-' + #search")
+    //@Cacheable(value = "recruits", key = "#page + '-' + #size + '-' + #recruitStatus + '-' + #searchType + '-' + #search")
     public Page<Recruit> getFilteredRecruits(int page, int size, String recruitStatus, String searchType, String search) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("registDate").descending());
         if ("조회수순".equals(searchType)) {
@@ -61,7 +61,7 @@ public class RecruitService {
     }
 
     // 모집글 상세페이지
-    @Cacheable(value = "recruit", key = "#recruitID")
+    //@Cacheable(value = "recruit", key = "#recruitID")
     @Transactional
     public Recruit getRecruitID(Integer recruitID) {
         Recruit recruit = recruitRepository.findByIdWithReplies(recruitID)

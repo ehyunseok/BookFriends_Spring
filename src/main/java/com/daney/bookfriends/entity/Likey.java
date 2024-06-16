@@ -11,8 +11,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "likey")
 @IdClass(LikeyId.class)
-public class Likey implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Likey/* implements Serializable */{
+//    private static final long serialVersionUID = 1L;
 
     @Id
     @Column(name = "memberID", nullable = false)

@@ -13,8 +13,8 @@ import java.util.List;
 @Entity
 @Table(name = "recruit")
 @DynamicInsert
-public class Recruit implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Recruit/* implements Serializable */{
+//    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +40,6 @@ public class Recruit implements Serializable {
     @Column(name = "viewCount")
     private Integer viewCount;
 
-    @OneToMany(mappedBy = "recruit", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "recruit", cascade = CascadeType.ALL, orphanRemoval = true/*, fetch = FetchType.LAZY*/)
     private List<Reply> replies;
 }

@@ -8,8 +8,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Data
-public class BoardDto implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class BoardDto /*implements Serializable*/ {
+//    private static final long serialVersionUID = 1L;
 
     private Integer postID;
     private String postCategory;

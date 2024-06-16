@@ -13,8 +13,8 @@ import java.util.List;
 @Entity
 @Table(name = "board")
 @DynamicInsert
-public class Board implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Board /*implements Serializable*/ {
+//    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,7 @@ public class Board implements Serializable {
     @Column(name = "postDate")
     private Timestamp postDate;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true/*, fetch = FetchType.LAZY*/)
     private List<Reply> replies;
 
     @Transient

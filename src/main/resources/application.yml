@@ -6,13 +6,13 @@ spring:
   config:
     import: "classpath:api-key.yml"
   #Data - redis
-  data:
-    redis:
-      host: localhost
-      port: 6379
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
   #cache - redis
-  cache:
-    type: redis
+#  cache:
+#    type: redis
 #    redis:
 #      time-to-live: 3600s
 #      key-prefix: bookfriends
@@ -64,6 +64,9 @@ spring:
   web:
     resources:
       static-locations: file:///C:/BookFriends/uploads/
+      cache:
+        period: 0 #캐시 비활성화
+        use-last-modified: true # 파일 변경 시간 기반 캐시 사용
 # 로그
 logging:
   level:
@@ -73,12 +76,18 @@ logging:
     org.springframework: DEBUG
     com.daney.bookfriends: DEBUG
     org.springframework.web.client.RestTemplate: DEBUG #국중 api 테스트를 위해 추가
+    org.springframework.web: DEBUG
+    org.apache.jasper: DEBUG
+    org.apache.catalina: DEBUG
 
 # 서버
 server:
+  tomcat:
+    basedir: target/tomcat
+    background-processor-delay: 10
   servlet:
     context-path: /bookfriends
-  port: 8080
+  port: 8001
 
 #file 업로드 경로
 file:
