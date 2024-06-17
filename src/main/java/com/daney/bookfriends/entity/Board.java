@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -44,7 +45,12 @@ public class Board /*implements Serializable*/ {
     private Timestamp postDate;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true/*, fetch = FetchType.LAZY*/)
-    private List<Reply> replies;
+    private List<Reply> replies = new ArrayList<>();
+
+    public void addReply(Reply reply) {
+        replies.add(reply);
+        reply.setBoard(this);
+    }
 
     @Transient
     private int replyCount;

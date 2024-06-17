@@ -50,12 +50,15 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:3.2.0'
 	// JSP 추가
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.20'
-	implementation 'javax.servlet:jstl:1.2'
+	implementation 'jakarta.servlet:jakarta.servlet-api' //스프링부트 3.0 이상
+	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api' //스프링부트 3.0 이상
+	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl' //스프링부트 3.0 이상
+
 
 	//mail 추가
 	implementation 'org.springframework.boot:spring-boot-starter-mail:3.3.0'
 	//DevTools 추가
-//	implementation 'org.springframework.boot:spring-boot-devtools:3.3.0'
+	implementation 'org.springframework.boot:spring-boot-devtools:3.3.0'
 	// JWT 라이브러리
 	implementation group: 'com.auth0', name: 'java-jwt', version: '4.4.0'
 	// spring security

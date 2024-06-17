@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -41,5 +42,10 @@ public class Recruit/* implements Serializable */{
     private Integer viewCount;
 
     @OneToMany(mappedBy = "recruit", cascade = CascadeType.ALL, orphanRemoval = true/*, fetch = FetchType.LAZY*/)
-    private List<Reply> replies;
+    private List<Reply> replies = new ArrayList<>();
+
+    public void addReply(Reply reply) {
+        replies.add(reply);
+        reply.setRecruit(this);
+    }
 }

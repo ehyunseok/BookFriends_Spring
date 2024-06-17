@@ -28,9 +28,24 @@ public class Reply /*implements Serializable */{
     @JoinColumn(name = "postID")
     private Board board;
 
+    public void setBoard(Board board) {
+        this.board = board;
+        if(!board.getReplies().contains(this)) {
+            board.getReplies().add(this);
+        }
+    }
+
+
     @ManyToOne
     @JoinColumn(name = "recruitID")
     private Recruit recruit;
+
+    public void setRecruit(Recruit recruit) {
+        this.recruit = recruit;
+        if(!recruit.getReplies().contains(this)) {
+            recruit.getReplies().add(this);
+        }
+    }
 
     @Column(name = "replyContent")
     private String replyContent;

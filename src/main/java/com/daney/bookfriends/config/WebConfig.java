@@ -52,15 +52,14 @@ public class WebConfig implements WebMvcConfigurer {
 
         // 파일 업로드
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:C:/BookFriends/uploads/")
-                .setCachePeriod(0);  // 캐시 비활성화
+                .addResourceLocations("file:C:/BookFriends/uploads/");
 
 
         // 정적 리소스 처리 설정
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/")
-                .setCachePeriod(0)  // 캐시 무효화
-                .resourceChain(false);  // 캐시 체인 비활성화
+                .setCachePeriod(3600)
+                .resourceChain(true);
     }
 
     // 뷰 리졸버 설정 추가
@@ -82,12 +81,5 @@ public class WebConfig implements WebMvcConfigurer {
         return new HiddenHttpMethodFilter();
     }
 
-    //JSP 컴파일러 설정을 명시적으로 추가
-    @Bean
-    public ServletRegistrationBean<Servlet> jspServlet() {
-        ServletRegistrationBean<Servlet> registration = new ServletRegistrationBean<>(new JspServlet(), "*.jsp");
-        registration.setLoadOnStartup(1);
-        return registration;
-    }
 }
 

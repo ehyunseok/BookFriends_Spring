@@ -89,7 +89,10 @@ public class BoardService {
 
         // 정렬된 댓글 리스트 설정
         List<Reply> sortedReplies = replyRepository.findRepliesByBoardIdOrderByReplyDateDesc(postID);
-        board.setReplies(sortedReplies);
+
+        // 기존의 replies 컬렉션을 정렬된 리스트로 교체하지 않고, 새 리스트를 추가
+        board.getReplies().clear();
+        board.getReplies().addAll(sortedReplies);
 
         // 로그 출력
         sortedReplies.forEach(reply -> log.info("Reply ID: {}, Reply Date: {}", reply.getReplyID(), reply.getReplyDate()));
