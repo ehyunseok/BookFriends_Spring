@@ -72,8 +72,11 @@ public class ChatController {
             return dto;
         }).collect(Collectors.toList());
 
+        // 채팅 기록을 가져온다.
+        // lastID가 null인 이유는 처음 페이지 로드 시 모든 메시지를 가져오기 위해서이다.
         List<ChatDto> chatHistory = chatService.getChatHistory(memberID, receiverID, null);
 
+        // 모델에 데이터 추가
         model.addAttribute("memberID", memberID);
         model.addAttribute("receiverID", receiverID);
         model.addAttribute("chatFriends", chatFriendDtos);
@@ -85,13 +88,26 @@ public class ChatController {
 
         // 마지막 메시지 ID를 모델에 추가
         if (!chatHistory.isEmpty()) {
+            // chatHistory가 비어있지 않으면, 마지막 메시지의 ID를 lastID로 설정함
             model.addAttribute("lastID", chatHistory.get(chatHistory.size() - 1).getChatID());
         } else {
+            // 비어 있으면 lastID를 0으로 설정한다.
             model.addAttribute("lastID", 0);
         }
 
         return "chat/chatting";
     }
+
+    // 채팅 내역 가져오기
+    @GetMapping("/getChatHistory")
+    @ResponseBody
+    public List<ChatDto> getChatHistory(@RequestParam("senderID") String senderID,
+                                        @RequestParam("receiverID") String receiverID,
+                                        @RequestParam("listType") String listType,
+                                        @RequestParam(value = "lastID", required = false) Integer lastID) {
+        return chatService.getChatHistory(senderID, receiverID, lastID);
+    }
+
 
     // 메시지 보내기
     @PostMapping("/sendMessage")
@@ -132,4 +148,6 @@ public class ChatController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
 }

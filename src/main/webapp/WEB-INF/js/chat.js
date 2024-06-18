@@ -32,8 +32,10 @@ $(document).ready(function() {
     }
 
     function scrollToBottom() {
-        var chatList = $('#chatList');
-        chatList.scrollTop(chatList[0].scrollHeight);
+        var chatHistory = $('#chatHistory');
+        setTimeout(function() {
+            chatHistory.scrollTop(chatHistory[0].scrollHeight);
+        }, 100); // DOM 변경 후 스크롤 이동을 보장하기 위해 약간의 지연 추가
     }
 
     $("#peopleList").on("click", "li", function() {
@@ -41,7 +43,8 @@ $(document).ready(function() {
         window.location.href = encodeURI(url);
     });
 
-    $('#sendsvg').click(function() {
+    // 이벤트 핸들러 중복 등록 방지
+    $('#sendsvg').off('click').on('click', function() {
         var message = $('#message').val().trim();
         if (message.length === 0) {
             $('#dangerModal').modal('show');
@@ -50,7 +53,7 @@ $(document).ready(function() {
         }
     });
 
-    $('#message').keypress(function(event) {
+    $('#message').off('keypress').on('keypress', function(event) {
         if (event.which === 13 && !event.shiftKey) {
             event.preventDefault();
             var message = $('#message').val().trim();
@@ -80,6 +83,7 @@ $(document).ready(function() {
         var message = $('#message').val();
         var csrfToken = $("meta[name='_csrf']").attr("content");
         var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
         $.ajax({
             type: "POST",
             url: contextPath + "/chat/sendMessage",
@@ -92,11 +96,15 @@ $(document).ready(function() {
                 xhr.setRequestHeader(csrfHeader, csrfToken);
             },
             success: function(result) {
-                result = result.trim();
-                handleServerResponse(result);
-                if (result == "1") {
+                var trimmedResult = (typeof result === 'string' ? result.trim() : JSON.stringify(result).trim());
+                if (trimmedResult == "1") {
                     $('#message').val('');
-                    scrollToBottom();
+                    chatListFunction('recent', false, function() {
+                        scrollToBottom(); // 메시지 전송 후 새 메시지 추가 후 스크롤 이동
+                    });
+                    $('#successModal').modal('show');
+                } else {
+                    $('#dangerModal').modal('show');
                 }
             },
             error: function(xhr, status, error) {
@@ -105,10 +113,20 @@ $(document).ready(function() {
         });
     }
 
-    function chatListFunction(type, loadAll = false) {
+    function chatListFunction(type, loadAll = false, callback) {
         var memberID = $('#senderID').val();
         var receiverID = $('#receiverID').val();
-        var lastIDParam = loadAll ? null : lastID;
+        var lastIDParam = loadAll ? null : (lastID || null);
+
+        console.log("Requesting chat history with parameters:");
+        console.log("senderID: " + memberID);
+        console.log("receiverID: " + receiverID);
+        console.log("lastID: " + lastIDParam);
+
+        if (loadAll) {
+            $('#chatList').empty();
+        }
+
         $.ajax({
             type: "GET",
             url: contextPath + "/chat/getChatHistory",
@@ -118,27 +136,23 @@ $(document).ready(function() {
                 listType: type,
                 lastID: lastIDParam
             },
-            success: function(data) {
-                console.log("서버 응답 데이터:", data);
-                if (data == "") return;
-                var result = data;
+            success: function(result) {
+                console.log("서버 응답 데이터:", result);
+                if (!result || result.length === 0) return;
                 for (var i = 0; i < result.length; i++) {
                     addChat(result[i].chatID, result[i].sender.memberID, result[i].message, result[i].formattedChatTime);
                 }
-                if (loadAll) {
-                    if (result.length > 0) {
-                        lastID = result[result.length - 1].chatID;
-                        $('#lastID').val(lastID);
-                    }
-                } else {
-                    if (result.length > 0) {
-                        lastID = Math.max(lastID, result[result.length - 1].chatID);
-                    }
+                if (result.length > 0) {
+                    lastID = result[result.length - 1].chatID;
+                    $('#lastID').val(lastID);
                 }
-                scrollToBottom();
+                if (typeof callback === 'function') {
+                    callback();
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error 발생: " + status + ", " + error);
+                console.error("Response Text: " + xhr.responseText);
             }
         });
     }
@@ -146,7 +160,7 @@ $(document).ready(function() {
     function getInfiniteChat() {
         setInterval(function() {
             chatListFunction('ten');
-        }, 300000);
+        }, 3000);
     }
 
     function markAsRead() {
@@ -173,8 +187,9 @@ $(document).ready(function() {
         });
     }
 
-    chatListFunction('all', true);
-    getInfiniteChat();
+    chatListFunction('all', true, function() {
+        scrollToBottom(); // 초기 로드 시 스크롤을 맨 아래로 이동
+    });
     markAsRead();
-    scrollToBottom();
+    getInfiniteChat();
 });

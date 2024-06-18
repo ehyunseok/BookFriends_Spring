@@ -46,7 +46,7 @@ public class ChatService {
         }
 
         // 최신 메시지 시간 기준으로 정렬
-        chatDtos.sort(Comparator.comparing(ChatDto::getLastMessageTime).reversed());
+        chatDtos.sort(Comparator.comparing(ChatDto::getLastMessageTime));
 
         chatDtos.forEach(chatDto -> chatDto.setLastMessageTimeAgo(calculateTimeAgo(chatDto.getLastMessageTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())));
 
@@ -170,7 +170,7 @@ public class ChatService {
     public void markMessagesAsRead(String senderID, String receiverID) {
         List<Chat> chats = chatRepository.findBySenderAndReceiver(senderID, receiverID);
         for (Chat chat : chats) {
-            if (!chat.getChatRead()) {
+            if (!chat.getChatRead() && chat.getReceiver().getMemberID().equals(senderID)) {
                 chat.setChatRead(true);
                 chatRepository.save(chat);
             }

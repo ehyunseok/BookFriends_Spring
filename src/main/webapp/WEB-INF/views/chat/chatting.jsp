@@ -37,15 +37,11 @@
             <div class="card chat-app">
                 <!-- 채팅 사용자 리스트 -->
                 <div id="plist" class="people-list">
-                    <!-- 검색창 -->
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="glass"></span>
-                        </div>
-                        <input type="text" class="form-control" placeholder="Search...">
+                    <div class="pb-3" style="border-bottom: 2px solid #f4f7f6;">
+                        <span>대화 목록</span>
                     </div>
                     <!-- 사용자 목록 -->
-                    <ul class="list-unstyled chat-list mt-2 mb-0" id="peopleList">
+                    <ul class="list-unstyled chat-list mt-2 mb-0" id="peopleList" style="padding: 5px;">
                         <c:forEach var="chatFriend" items="${chatFriends}">
                             <c:set var="activeClass" value="${receiverID == chatFriend.memberID ? ' active' : ''}" />
                             <li class="clearfix${activeClass}" data-url="${pageContext.request.contextPath}/chat/chatting/${chatFriend.memberID}">
