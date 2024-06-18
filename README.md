@@ -63,38 +63,48 @@ Book Friends 프로젝트는 다음과 같은 계층 구조를 따릅니다:
    - 모집글 작성, 수정, 삭제
    - 조건부 조회 (최신순, 모집상태)
 6. **국립중앙도서관 API 연동**
-   - 국립중앙도서관 소장자료 검색, 사서추천도서 조회
+   - 국립중앙도서관 소장자료 검색
+   - 사서추천도서 조회
 
 ## 라이브러리 및 의존성
+
 - **Spring Boot**
-  - `spring-boot-starter-data-jpa:3.3.0`
-  - `spring-boot-starter-security:3.3.0`
-  - `spring-boot-starter-validation:3.3.0`
-  - `spring-boot-starter-web:3.3.0`
-  - `spring-boot-starter-mail:3.3.0`
-  - `spring-boot-devtools:3.3.0`
+  - `spring-boot-starter-data-jpa`
+  - `spring-boot-starter-security`
+  - `spring-boot-starter-validation`
+  - `spring-boot-starter-web`
+  - `spring-boot-starter-mail`
+  - `spring-boot-devtools`
 - **JPA**
-  - `spring-boot-starter-data-jpa:3.3.0`
+  - `spring-boot-starter-data-jpa`
 - **MySQL**
   - `mysql-connector-java:8.0.33`
 - **Lombok**
-  - `org.projectlombok:lombok:1.18.22`
+  - `org.projectlombok:lombok`
 - **JUnit**
-  - `spring-boot-starter-test:3.3.0`
-  - `spring-security-test:6.3.0`
-  - `junit-vintage-engine:5.8.2`
-  - `h2database:1.4.200`
+  - `spring-boot-starter-test`
+  - `spring-security-test`
+  - `junit-vintage-engine`
+  - `h2`
 - **ModelMapper**
   - `org.modelmapper:modelmapper:3.2.0`
 - **JSP**
   - `tomcat-embed-jasper:10.1.20`
-  - `jakarta.servlet.jsp.jstl:3.0.0`
+  - `jakarta.servlet.jsp.jstl`
+  - `org.glassfish.web:jakarta.servlet.jsp.jstl`
+  - `jakarta.servlet:jakarta.servlet-api`
 - **JWT**
   - `java-jwt:4.4.0`
 - **Spring Security**
   - `spring-security-core:6.3.0`
   - `spring-security-web:6.3.0`
   - `spring-security-config:6.3.0`
+  - `spring-security-taglibs:6.3.0`
+- **Jackson**
+  - `com.fasterxml.jackson.core:jackson-databind:2.17.1`
+  - `com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.1`
+- **XML Binding**
+  - `jakarta.xml.bind:jakarta.xml.bind-api:4.0.2`
 
 ## 업데이트 로그
 - 2024.06.04.
@@ -133,6 +143,16 @@ Book Friends 프로젝트는 다음과 같은 계층 구조를 따릅니다:
 - 2024.06.13
   - 서평, 자유게시판 redis 적용 완료
   - 독서모임 redis 적용 중
+- 2024.06.17
+  - 기존 코드 오류를 해결하고 Redis를 적용하기로 결정함
+  - 의존 라이브러리에 맞게 코드 수정
+  - 댓글 정렬 코드 오류 해결
+- 2024.06.18
+  - 채팅 메인화면 마지막 메시지 불러오는 코드 수정
+  - 실시간 채팅 페이지 
+    - 서버 컨트롤러에서 누락된 메소드 추가
+    - 클라이언트 화면에 메시지 리스트 중복 출력 문제 해결
+    - UI 약간 수정
 
 - Redis 적용 기능
   - 회원관리: 로그인 세션, 사용자 권한 캐싱.
