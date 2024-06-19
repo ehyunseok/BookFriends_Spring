@@ -73,11 +73,11 @@ dependencies {
 	// xml 바인딩 추가
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
 	// Redis
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
-//	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.3.0'
-	//cache
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-cache
-//	implementation 'org.springframework.boot:spring-boot-starter-cache:3.3.0'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.3.0'
+	// cache
+	implementation 'org.springframework.boot:spring-boot-starter-cache:3.3.0'
+	// actuator - 성능 측정을 위해 추가
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 }
 

@@ -10,6 +10,8 @@ import com.daney.bookfriends.reply.repository.ReplyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,7 @@ public class RecruitService {
     private ReplyRepository replyRepository;
 
     // 모집 메인 리스트
+    @Cacheable(value = "recruitList", key = "#page + '-' + #size + '-' + #recruitStatus + '-' + #searchType + '-' + #search") // Redis 캐시 적용
     public Page<Recruit> getFilteredRecruits(int page, int size, String recruitStatus, String searchType, String search) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("registDate").descending());
         if ("조회수순".equals(searchType)) {
@@ -47,6 +50,7 @@ public class RecruitService {
 
 
     // 모집글 작성하기
+    @CacheEvict(value = "recruitList", allEntries = true) // 모집글 작성 시 캐시 무효화
     public Recruit registRecruit(RecruitDto recruitDto, String memberID) {
         Recruit recruit = modelMapper.map(recruitDto, Recruit.class);
         Member member = memberRepository.findById(memberID).orElseThrow(() -> new IllegalArgumentException("Invalid member ID: " + memberID));
@@ -55,6 +59,7 @@ public class RecruitService {
     }
 
     // 모집글 상세페이지
+    @Cacheable(value = "recruit", key = "#recruitID") // Redis 캐시 적용
     @Transactional
     public Recruit getRecruitID(Integer recruitID) {
         Recruit recruit = recruitRepository.findByIdWithReplies(recruitID)
@@ -76,6 +81,7 @@ public class RecruitService {
 
 
     // 모집글 수정하기
+    @CacheEvict(value = "recruit", key = "#recruitID") // 모집글 수정 시 캐시 무효화
     @Transactional
     public Recruit updateRecruit(Integer recruitID, RecruitDto recruitDto, String memberID) {
         Recruit existingRecruit = recruitRepository.findById(recruitID).orElseThrow(() -> new IllegalArgumentException("Invalid RecruitID: " + recruitID));
@@ -89,11 +95,13 @@ public class RecruitService {
     }
 
     // 모집글 삭제
+    @CacheEvict(value = "recruit", key = "#recruitID") // 모집글 삭제 시 캐시 무효화
     public void deleteRecruit(Integer recruitID) {
         recruitRepository.deleteById(recruitID);
     }
 
     // 댓글 달기
+    @CacheEvict(value = "recruit", key = "#recruitID") // 댓글 추가 시 해당 모집글 캐시 무효화
     public Reply addReply(Integer recruitID, String replyContent, String memberID) {
         Reply reply = new Reply();
         reply.setMember(memberRepository.findByMemberID(memberID));
@@ -104,6 +112,7 @@ public class RecruitService {
     }
 
     // 댓글 수정하기
+    @CacheEvict(value = "recruit", key = "#reply.recruit.recruitID") // 댓글 수정 시 해당 모집글 캐시 무효화
     public Reply updateReply(Integer replyID, String replyContent, String memberID) {
         Reply reply = replyRepository.findById(replyID).orElseThrow(() -> new IllegalArgumentException("Invalid replyID:" + replyID));
         if (!reply.getMember().getMemberID().equals(memberID)) {
@@ -114,6 +123,7 @@ public class RecruitService {
     }
 
     // 댓글 삭제하기
+    @CacheEvict(value = "recruit", key = "#reply.recruit.recruitID") // 댓글 삭제 시 해당 모집글 캐시 무효화
     @Transactional
     public void deleteReply(Integer replyID) {
         replyRepository.deleteById(replyID);

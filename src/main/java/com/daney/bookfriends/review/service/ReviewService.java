@@ -34,7 +34,7 @@ public class ReviewService {
     private MemberRepository memberRepository;
 
     // 모든 리뷰 리스트
-    //@Cacheable(value = "reviewList", key = "'page-' + #page + '-size-' + #size + '-category-' + #category + '-searchType-' + #searchType + '-search-' + #search")
+    @Cacheable(value = "reviewList", key = "'page-' + #page + '-size-' + #size + '-category-' + #category + '-searchType-' + #searchType + '-search-' + #search") // Redis 캐시 적용
     public Page<Review> getFilteredReviews(int page, int size, String category, String searchType, String search) {
         Pageable pageable;
 
@@ -61,6 +61,7 @@ public class ReviewService {
     }
 
     // 리뷰 작성하기
+    @CacheEvict(value = "reviewList", allEntries = true) // 리뷰 작성 시 캐시 무효화
     public Review registReview(ReviewDto reviewDto, String memberID) {
         
         Review review = modelMapper.map(reviewDto, Review.class);
@@ -72,7 +73,7 @@ public class ReviewService {
     }
 
     //리뷰 상세페이지
-    //@Cacheable(value = "review", key = "#reviewID")
+    @Cacheable(value = "review", key = "#reviewID") // Redis 캐시 적용
     @Transactional
     public Review getReviewById(Integer reviewID) {
         try {
@@ -89,6 +90,7 @@ public class ReviewService {
     }
 
     //서평 수정
+    @CacheEvict(value = "review", key = "#reviewID") // 서평 수정 시 캐시 무효화
     @Transactional
     public Review updateReview(Integer reviewID, ReviewDto reviewDto, String memberID) {
         Review existingReview = reviewRepository.findById(reviewID)
@@ -111,6 +113,7 @@ public class ReviewService {
 
 
     // 서평 삭제
+    @CacheEvict(value = "review", key = "#reviewID") // 서평 삭제 시 캐시 무효화
     @Transactional
     public void deleteReview(Integer reviewID) {
         reviewRepository.deleteById(reviewID);

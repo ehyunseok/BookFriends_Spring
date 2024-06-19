@@ -7,7 +7,9 @@ import com.daney.bookfriends.jwt.JwtService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -39,6 +42,12 @@ public class MemberService {
     @Autowired
     private JwtService jwtService;
 
+    //Redis 추가!
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+    private static final String SESSION_KEY_PREFIX = "session";
+    private static final String AUTH_KEY_PREFIX = "auth";
+
     //member 가입
     // 아이디 중복 확인
     public boolean isMemberIDDuplicate(String memberID){    // 사용자가 입력한 아이디
@@ -46,9 +55,6 @@ public class MemberService {
         log.info("member ID '{}' duplication check: {}", memberID, isDuplicate);
         return isDuplicate; // 중복 되면 true, 아니면 false
     }
-
-
-
 
     //회원 가입 처리 & 회원 정보 저장
     @Transactional
@@ -95,11 +101,18 @@ public class MemberService {
         UsernamePasswordAuthenticationToken authToken
                 = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
+        // Redis 적용으로 추가
+        cacheUserSession(memberID, authToken);
 
         log.info("Authentication token: {}", authToken);
         log.info("Authenticated user: {}", SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
+    // Redis 적용으로 추가
+    private void cacheUserSession(String memberID, UsernamePasswordAuthenticationToken authToken) { // 추가된 메소드
+        String sessionKey = SESSION_KEY_PREFIX + memberID;
+        redisTemplate.opsForValue().set(sessionKey, authToken, 30, TimeUnit.MINUTES);
+    }
 
 
     // 이메일 인증 처리
@@ -120,7 +133,6 @@ public class MemberService {
     //이메일 재전송 로직
     public void resendConfirmationEmail(String memberEmail) {
         String token = jwtService.generateToken(memberEmail);
-        //emailService.sendRegistrationConfirmationEmailHtml(memberEmail);
     }
 
 //member 수정
@@ -150,39 +162,55 @@ public class MemberService {
                 .orElse(null); // 사용자가 없다면 null 반환
     }
 
-//    // 이메일 확인 여부
-//    public boolean isMemberEmailChecked(String memberID) {
-//        log.info("Checking email status for member with ID: {}", memberID);
-//        MemberDto member = getMemberById(memberID);
-//        boolean isChecked = member != null && Boolean.TRUE.equals(member.getMemberEmailChecked());
-//        log.info("Email checked status for Member with ID: {} is {}", memberID, isChecked);
-//        return isChecked;
-//    }
 
 //로그인
     public boolean login(String memberID, String memberPassword) {
         log.info("Attempting to log in with memberID: {}", memberID);
 
-        //ID와 Password가 잘 전달 되었는지 확인
-        if(memberID == null || memberID.trim().isEmpty() || memberPassword == null || memberPassword.trim().isEmpty()){
-            log.warn("Login attempt failed: memberID or memberPassword is empty");
-            return false;
+        // Redis 적용으로 추가 및 변경 start
+        String authKey = AUTH_KEY_PREFIX + memberID;
+        if (redisTemplate.hasKey(authKey)) {
+            UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) redisTemplate.opsForValue().get(authKey);
+            if (authToken != null) {
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+                return true;
+            }
         }
-
         Member member = memberRepository.findByMemberID(memberID);
-        if(member == null){
-            log.warn("Login failed: memberID {} not found", memberID);
-            return false;   //ID가 존재하지 않음
-        }
-        if(passwordEncoder.matches(member.getMemberPassword(), memberPassword)){
-            log.info("Login successful for memberID: {}", memberID);
+        if (member != null && passwordEncoder.matches(memberPassword, member.getMemberPassword())) {
             autoLogin(memberID);
-            return true;    // 인증 성공
-        } else {
-            log.warn("Login failed: incorrect password for memberID: {}", memberID);
-            return false;   // 비밀번호가 틀림
+            cacheUserAuth(memberID, SecurityContextHolder.getContext().getAuthentication()); // 추가된 부분
+            return true;
         }
+        return false;
+        //end
+
+
+//        //ID와 Password가 잘 전달 되었는지 확인
+//        if(memberID == null || memberID.trim().isEmpty() || memberPassword == null || memberPassword.trim().isEmpty()){
+//            log.warn("Login attempt failed: memberID or memberPassword is empty");
+//            return false;
+//        }
+//
+//        Member member = memberRepository.findByMemberID(memberID);
+//        if(member == null){
+//            log.warn("Login failed: memberID {} not found", memberID);
+//            return false;   //ID가 존재하지 않음
+//        }
+//        if(passwordEncoder.matches(member.getMemberPassword(), memberPassword)){
+//            log.info("Login successful for memberID: {}", memberID);
+//            autoLogin(memberID);
+//            return true;    // 인증 성공
+//        } else {
+//            log.warn("Login failed: incorrect password for memberID: {}", memberID);
+//            return false;   // 비밀번호가 틀림
+//        }
     }
 
+    // Redis 적용으로 추가함
+    private void cacheUserAuth(String memberID, Authentication authToken) { // 변경된 메소드
+        String authKey = AUTH_KEY_PREFIX + memberID;
+        redisTemplate.opsForValue().set(authKey, authToken, 30, TimeUnit.MINUTES);
+    }
 
 }

@@ -50,6 +50,21 @@ spring:
   web:
     resources:
       static-locations: file:///C:/BookFriends/uploads/
+  #Redis
+  data:
+    redis:
+      host: localhost   # Redis 서버의 호스트 주소
+      port: 6379        # Redis 서버의 포트
+      lettuce:          # Redis 클라이언트 라이브러리
+        pool:           # Redis 연결을 관리하기 위한 연결 풀의 동작 방식을 정의한다.
+          max-active: 8 #동시에 사용할 수 있는 최대 연결 수를 지정(동시에 8개의 연결을 사용할 수 있다.)
+          max-idle: 8   #유휴 상태로 유지할 수 있는 최대 연결 수를 지정
+          min-idle: 0   #유휴 상태로 유지할 수 있는 최소 연결 수를 지정(필요하지 않으면 모든 연결을 닫을 수 있다.)
+  #cache
+  cache:
+    type: redis         # Spring cache가 redis를 캐시 저장소로 사용하도록 설정함
+
+
 # 로그
 logging:
   level:

@@ -7,11 +7,9 @@ import com.daney.bookfriends.entity.Member;
 import com.daney.bookfriends.entity.Reply;
 import com.daney.bookfriends.reply.repository.ReplyRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,8 +37,9 @@ public class BoardService {
     @Autowired
     private ReplyRepository replyRepository;
 
-    // 모든 게시글 리스트 가져오기
-    //@Cacheable(value = "boardList", key = "#page + '-' + #size + '-' + #postCategory + '-' + #searchType + '-' + #search")
+// 모든 게시글 리스트 가져오기
+    // Redis 캐시 적용-게시글 목록을 캐싱하여 동일한 요청에 대해 Redis에서 빠르게 응답
+    @Cacheable(value = "boardList", key = "#page + '-' + #size + '-' + #postCategory + '-' + #searchType + '-' + #search")
     public Page<Board> getFilteredPosts(int page, int size, String postCategory, String searchType, String search) {
         Pageable pageable;
         switch (searchType) {
@@ -63,6 +62,8 @@ public class BoardService {
     }
 
     // 게시글 작성하기
+    // 게시글 작성 시 캐시 무효화-게시글이 변경되면 관련 캐시를 무효화하여 최신 상태 유지
+    @CacheEvict(value = "boardList", allEntries = true)
     public Board registPost(BoardDto boardDto, String memberID) {
 
         // model mapper 라이브러리를 통해 BoardDto 객체를 Board 엔티티 객체로 변환
@@ -79,7 +80,8 @@ public class BoardService {
     }
 
     //게시글 상세페이지 보기
-    //@Cacheable(value = "board", key = "#postID")
+    // Redis 캐시 적용-특정 게시글 조회 시 캐싱하여 동일한 요청에 대해 Redis에서 빠르게 응답
+    @Cacheable(value = "board", key = "#postID")
     @Transactional
     public Board getPostById(Integer postID) {
         Board board = boardRepository.findById(postID)
@@ -101,6 +103,8 @@ public class BoardService {
     }
 
     //게시글 수정하기
+    // 게시글 수정 시 캐시 무효화-게시글이 변경되면 관련 캐시를 무효화하여 최신 상태 유지
+    @CacheEvict(value = "board", key = "#postID")
     @Transactional
     public Board updatePost(Integer postID, BoardDto boardDto, String memberID) {
         Board existingBoard = boardRepository.findById(postID)
@@ -120,12 +124,15 @@ public class BoardService {
     }
 
     //게시글 삭제
+    // 게시글 삭제 시 캐시 무효화-게시글이 변경되면 관련 캐시를 무효화하여 최신 상태 유지
+    @CacheEvict(value = "board", key = "#postID")
     public void deletePost(Integer postID) {
         boardRepository.deleteById(postID);
     }
 
 
     // 댓글 달기
+    @CacheEvict(value = "board", key = "#postID") // 댓글 추가 시 해당 게시글 캐시 무효화
     public Reply addReply(Integer postID, String replyContent, String memberID) {
 
         Reply reply = new Reply();
@@ -144,6 +151,7 @@ public class BoardService {
     }
 
     //댓글 수정하기
+    @CacheEvict(value = "board", key = "#reply.board.postID") // 댓글 수정 시 해당 게시글 캐시 무효화
     public Reply updateReply(Integer replyID, String replyContent, String memberID) {
         Reply reply = replyRepository.findById(replyID)
                 .orElseThrow(()->new IllegalArgumentException("Invalid replyID:" + replyID));
@@ -155,6 +163,7 @@ public class BoardService {
     }
 
     // 댓글 삭제
+    @CacheEvict(value = "board", key = "#reply.board.postID") // 댓글 삭제 시 해당 게시글 캐시 무효화
     public void deleteReply(Integer replyID) {
         replyRepository.deleteById(replyID);
     }

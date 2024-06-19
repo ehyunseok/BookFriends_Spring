@@ -10,6 +10,9 @@ import com.daney.bookfriends.util.DateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -31,6 +34,10 @@ public class ChatService {
     private ModelMapper modelMapper;
     @Autowired
     private MemberRepository memberRepository;
+
+    //Redis 추가
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     // 사용자가 참여한 모든 채팅 리스트 가져오기
     public List<ChatDto> getChatList(String memberID) {
@@ -67,6 +74,7 @@ public class ChatService {
     }
 
     // 사용자의 채팅 히스토리
+    @Cacheable(value = "chatHistory", key = "#memberID + '-' + #receiverID + '-' + #lastID") // Redis 캐시 적용
     public List<ChatDto> getChatHistory(String memberID, String receiverID, Integer lastID) {
         List<Chat> chats;
         if (lastID == null) {
@@ -146,6 +154,7 @@ public class ChatService {
     }
 
     //메시지 전송
+    @CacheEvict(value = "chatHistory", key = "#senderID + '-' + #receiverID") // 메시지 전송 시 캐시 무효화
     public void sendMessage(String senderID, String receiverID, String message) {
         Optional<Member> senderOptional = memberRepository.findById(senderID);
         Optional<Member> receiverOptional = memberRepository.findById(receiverID);
@@ -167,6 +176,7 @@ public class ChatService {
     }
 
     //메시지 읽음 처리
+    @CacheEvict(value = "chatHistory", key = "#senderID + '-' + #receiverID") // 메시지 읽음 처리 시 캐시 무효화
     public void markMessagesAsRead(String senderID, String receiverID) {
         List<Chat> chats = chatRepository.findBySenderAndReceiver(senderID, receiverID);
         for (Chat chat : chats) {

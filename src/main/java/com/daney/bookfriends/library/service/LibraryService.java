@@ -8,6 +8,7 @@ import com.daney.bookfriends.library.RecomBooksResponse;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -35,6 +36,8 @@ public class LibraryService {
     }
 
     // 국중 소장 자료 검색
+    // Redis 캐시 적용-도서 검색 결과를 캐싱함으로써 자주 조회되는 데이터에 대해 빠른 응답을 제공함
+    @Cacheable(value = "books", key = "#query + '-' + #page + '-' + #pageSize")
     public List<Book> searchBooks(String query, int page, int pageSize) {
         try {
             String apiKey = apiConfig.getKey();
@@ -64,6 +67,7 @@ public class LibraryService {
         }
     }
 
+    @Cacheable(value = "totalBooks", key = "#query") // Redis 캐시 적용
     public int getTotalBooks(String query) {
         try {
             String apiKey = apiConfig.getKey();
@@ -90,6 +94,8 @@ public class LibraryService {
     }
 
     // 사서 추천 도서
+    // Redis 캐시 적용-추천 도서 조회 결과를 캐싱함으로써 자주 조회되는 데이터에 대해 빠른 응답을 제공함
+    @Cacheable(value = "recommendedBooks", key = "#year + '-' + #kdcName + '-' + #page + '-' + #pageSize")
     public List<RecomBook> fetchRecommendedBooksByYearAndKdcName(String year, String kdcName, int page, int pageSize) {
         String apiKey = apiConfig.getKey();
         int startRow = (page - 1) * pageSize + 1;
@@ -125,6 +131,7 @@ public class LibraryService {
         }
     }
 
+    @Cacheable(value = "totalRecommendedBooks", key = "#year + '-' + #kdcName") // Redis 캐시 적용
     public int getTotalRecommendedBooksCount(String year, String kdcName) {
         String apiKey = apiConfig.getKey();
 

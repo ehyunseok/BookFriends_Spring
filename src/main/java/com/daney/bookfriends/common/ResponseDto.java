@@ -1,4 +1,4 @@
-package com.daney.bookfriends.commons;
+package com.daney.bookfriends.common;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;
