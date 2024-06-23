@@ -180,6 +180,8 @@ $(document).ready(function() {
 });
 </script>
 
+<!-- Include dateFormatter.js -->
+<script src="${pageContext.request.contextPath}/js/dateFormatter.js"></script>
 
 <!-- postReplyRegist.js 추가 -->
 <script src="${pageContext.request.contextPath}/js/postReplyRegist.js"></script>

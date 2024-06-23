@@ -6,6 +6,8 @@
     <!-- header.jsp -->
     <%@ include file="../commons/header.jsp" %>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/memberJoinLogin.css">
+    <meta name="_csrf" content="${_csrf.token}">
+    <meta name="_csrf_header" content="${_csrf.headerName}">
 </head>
 
 <body data-context-path="${pageContext.request.contextPath}">
@@ -17,11 +19,8 @@
 
 <!-- container  -->
 <section class="container mt-5" style="max-width: 560px">
-    <form method="post" action="${pageContext.request.contextPath}/member/login">
+    <form id="loginForm" method="post" action="${pageContext.request.contextPath}/member/login">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        <!-- Spring Security의 기본 필드 이름과 일치하게 한다!!!
-                id= username
-                password= password -->
         <div class="form-group">
             <label>아이디</label>
             <input type="text" name="username" class="form-control" id="memberID" required>
@@ -30,7 +29,7 @@
             <label>비밀번호</label>
             <input type="password" name="password" class="form-control" id="memberPassword" required>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">로그인</button>
+        <button type="submit" id="loginBtn" class="btn btn-primary btn-block">로그인</button>
     </form>
     <div class="mt-3">
         <p>아직 계정이 없으신가요? <a href="${pageContext.request.contextPath}/member/join">회원가입하기</a></p>
@@ -38,7 +37,6 @@
 </section>
 
 <script src="${pageContext.request.contextPath}/js/memberLogin.js"></script>
-
 
 <!-- footer.jsp -->
 <%@ include file="../commons/footer.jsp" %>
