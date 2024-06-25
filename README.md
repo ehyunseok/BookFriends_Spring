@@ -86,7 +86,17 @@ https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/3c8bdb91-08a5-4
 
 
 ### 메인
+![메인](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/713934aa-5d4b-4a11-b3dc-d5168ce44893)
+
+
 ### 서평
+#### 서평 메인(조건부 조회/검색)
+https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/803ff783-5829-423f-b4a9-600c84168b94
+
+
+#### 서평 게시글(조회/작성/수정/삭제)
+
+
 ### 국립중앙도서관 API
 ### 독서모임
 ### 채팅
