@@ -115,19 +115,30 @@ https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/0021cdba-281f-4
 ---
 
 ### 독서모임
+#### 독서모임 메인(조건부 조회/검색)
+https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/1c68fe98-2740-4fb8-b5b3-061e727bb76e
 
 ---
+#### 독서모임 게시글(조회/작성/수정)
+https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/c571231d-6218-48f8-a7c9-1e99076f6ab8
 
+#### 독서모임 댓글(작성/수정/삭제)
+https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/fb95615c-7386-4345-be7c-ee31e556e691
+
+---
 ### 채팅
+https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/efb839db-2d6d-44c8-9e6a-1aef0ff4f91e
 
 ---
+
+
 ## ERD
 ![BookFriendsERD2](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/be562742-f169-4f59-af47-5539d8937aa9)
 
+---
 
 
 ## 라이브러리 및 의존성
-
 - **Spring Boot**
   - `spring-boot-starter-data-jpa`
   - `spring-boot-starter-security`
