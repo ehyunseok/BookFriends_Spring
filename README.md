@@ -80,27 +80,42 @@ Book Friends 프로젝트는 다음과 같은 계층 구조를 따릅니다:
 ### 회원가입
 https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/cdf9058b-5d7d-42d4-925f-efa695e84d7f
 
+---
 
 ### 로그인
 https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/3c8bdb91-08a5-4fcd-82e2-31b1369c25a8
 
+---
 
 ### 메인
 ![메인](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/713934aa-5d4b-4a11-b3dc-d5168ce44893)
 
+---
 
 ### 서평
 #### 서평 메인(조건부 조회/검색)
 https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/803ff783-5829-423f-b4a9-600c84168b94
 
+---
 
 #### 서평 게시글(조회/작성/수정/삭제)
+https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/0ba3e2fe-d159-4807-8976-3af65ca57749
 
+
+
+---
 
 ### 국립중앙도서관 API
+
+---
+
 ### 독서모임
+
+---
+
 ### 채팅
 
+---
 ## ERD
 ![BookFriendsERD2](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/be562742-f169-4f59-af47-5539d8937aa9)
 
