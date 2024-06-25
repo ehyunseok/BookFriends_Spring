@@ -101,11 +101,16 @@ https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/803ff783-5829-4
 #### 서평 게시글(조회/작성/수정/삭제)
 https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/0ba3e2fe-d159-4807-8976-3af65ca57749
 
-
-
 ---
 
 ### 국립중앙도서관 API
+#### 사서 추천 도서(전체/조건부 조회)
+https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/5d69e895-a9fe-411c-a303-3024ec081e48
+
+---
+
+#### 국립중앙도서관 소장도서 검색
+https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/0021cdba-281f-447e-b143-5e41561447fe
 
 ---
 
