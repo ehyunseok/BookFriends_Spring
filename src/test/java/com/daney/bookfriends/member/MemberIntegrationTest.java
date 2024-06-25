@@ -1,7 +1,7 @@
-package com.daney.bookfriends.Member;
+package com.daney.bookfriends.member;
 
-import com.daney.bookfriends.Member.dto.MemberDto;
-import com.daney.bookfriends.Member.service.MemberService;
+import com.daney.bookfriends.member.dto.MemberDto;
+import com.daney.bookfriends.member.service.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

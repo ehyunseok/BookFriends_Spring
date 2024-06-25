@@ -2,7 +2,7 @@ package com.daney.bookfriends.home.controller;
 
 import com.daney.bookfriends.board.service.BoardService;
 import com.daney.bookfriends.review.service.ReviewService;
-import com.daney.bookfriends.Member.service.MemberService;
+import com.daney.bookfriends.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

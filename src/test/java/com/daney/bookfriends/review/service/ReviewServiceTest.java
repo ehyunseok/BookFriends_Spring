@@ -1,6 +1,6 @@
 package com.daney.bookfriends.review.service;
 
-import com.daney.bookfriends.Member.repository.MemberRepository;
+import com.daney.bookfriends.member.repository.MemberRepository;
 import com.daney.bookfriends.entity.Member;
 import com.daney.bookfriends.entity.Review;
 import com.daney.bookfriends.review.dto.ReviewDto;

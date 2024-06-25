@@ -1,15 +1,13 @@
 $(document).ready(function () {
-    // URL에서 파라미터 읽기
-    function getUrlParameter(name) {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        var results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-    }
-
-    // 로그인 실패 시 알림창 표시
-    if (getUrlParameter('error')) {
-        alert('아이디 또는 비밀번호를 다시 입력해주세요.');
+    var errorMessage = $('#errorMessage').val();
+    if (errorMessage) {
+        if (errorMessage === 'not_found') {
+            alert('아이디를 찾을 수 없습니다.');
+        } else if (errorMessage === 'incorrect_password') {
+            alert('비밀번호가 일치하지 않습니다.');
+        } else {
+            alert(errorMessage);
+        }
     }
 
     $('#loginBtn').click(function (event) {

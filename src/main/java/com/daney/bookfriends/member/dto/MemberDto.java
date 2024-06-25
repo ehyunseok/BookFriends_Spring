@@ -1,6 +1,5 @@
-package com.daney.bookfriends.Member.dto;
+package com.daney.bookfriends.member.dto;
 
-import com.daney.bookfriends.entity.Member;
 import lombok.Data;
 
 import java.util.Date;

@@ -1,6 +1,6 @@
 package com.daney.bookfriends.chat.service;
 
-import com.daney.bookfriends.Member.repository.MemberRepository;
+import com.daney.bookfriends.member.repository.MemberRepository;
 import com.daney.bookfriends.chat.dto.ChatDto;
 import com.daney.bookfriends.chat.repository.ChatRepository;
 import com.daney.bookfriends.entity.Chat;

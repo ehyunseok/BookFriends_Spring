@@ -1,7 +1,7 @@
-package com.daney.bookfriends.Member.service;
+package com.daney.bookfriends.member.service;
 
-import com.daney.bookfriends.Member.dto.MemberDto;
-import com.daney.bookfriends.Member.repository.MemberRepository;
+import com.daney.bookfriends.member.dto.MemberDto;
+import com.daney.bookfriends.member.repository.MemberRepository;
 import com.daney.bookfriends.entity.Member;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +11,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

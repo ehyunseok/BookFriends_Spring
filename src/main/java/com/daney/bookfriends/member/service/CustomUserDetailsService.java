@@ -1,6 +1,6 @@
-package com.daney.bookfriends.Member.service;
+package com.daney.bookfriends.member.service;
 
-import com.daney.bookfriends.Member.repository.MemberRepository;
+import com.daney.bookfriends.member.repository.MemberRepository;
 import com.daney.bookfriends.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;

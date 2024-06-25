@@ -1,9 +1,10 @@
-package com.daney.bookfriends.Member.service;
+package com.daney.bookfriends.member.service;
 
 import com.daney.bookfriends.entity.Member;
-import com.daney.bookfriends.Member.dto.MemberDto;
-import com.daney.bookfriends.Member.repository.MemberRepository;
+import com.daney.bookfriends.member.dto.MemberDto;
+import com.daney.bookfriends.member.repository.MemberRepository;
 import com.daney.bookfriends.jwt.JwtService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -164,53 +167,53 @@ public class MemberService {
 
 
 //로그인
-    public boolean login(String memberID, String memberPassword) {
+    public boolean login(String memberID, String memberPassword, Model model) {
         log.info("Attempting to log in with memberID: {}", memberID);
 
-        // Redis 적용으로 추가 및 변경 start
+    // Redis 적용으로 추가 및 변경 start
+        // 레디스에서 사용할 인증키를 만듦
         String authKey = AUTH_KEY_PREFIX + memberID;
+        // 레디스에서 키를 확인
         if (redisTemplate.hasKey(authKey)) {
+            // 인증정보 가져오기: 레디스에서 authToken을 가져온다.
             UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) redisTemplate.opsForValue().get(authKey);
+            // authToken이 null이 아니면 SecurityContextHolder에 인증정보를 설정한다.
             if (authToken != null) {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                // 인증 정보가 유효하면 true를 반환함
                 return true;
             }
         }
+
+        // 사용자 정보 검증
+        // memberID를 이용하여  memberRepository에서 사용자 정보를 조회함
         Member member = memberRepository.findByMemberID(memberID);
+        // 사용자가 입력한 비밀번호가 db 상에 저장된 비번과 일치하는지 확인
         if (member != null && passwordEncoder.matches(memberPassword, member.getMemberPassword())) {
+            // autoLogin 메소드를 호출하여 로그인 처리를 수행함
             autoLogin(memberID);
+            // cacheUserAuth 메소드를 호출해서 인증 정보를 레디스에 캐싱함
             cacheUserAuth(memberID, SecurityContextHolder.getContext().getAuthentication()); // 추가된 부분
+            // 사용자 정보가 유효하면 true를 반환함
             return true;
+        } else {
+            if (member == null) {
+                log.warn("Login failed: Member with ID {} not found.", memberID);
+                model.addAttribute("error", "not_found");
+            } else if (!passwordEncoder.matches(memberPassword, member.getMemberPassword())) {
+                log.warn("Login failed: Incorrect password for memberID {}.", memberID);
+                model.addAttribute("error", "incorrect_password");
+            }
+            // 사용자 정보가 유효하지 않으면 false를 반환함
+            return false;
         }
-        return false;
-        //end
-
-
-//        //ID와 Password가 잘 전달 되었는지 확인
-//        if(memberID == null || memberID.trim().isEmpty() || memberPassword == null || memberPassword.trim().isEmpty()){
-//            log.warn("Login attempt failed: memberID or memberPassword is empty");
-//            return false;
-//        }
-//
-//        Member member = memberRepository.findByMemberID(memberID);
-//        if(member == null){
-//            log.warn("Login failed: memberID {} not found", memberID);
-//            return false;   //ID가 존재하지 않음
-//        }
-//        if(passwordEncoder.matches(member.getMemberPassword(), memberPassword)){
-//            log.info("Login successful for memberID: {}", memberID);
-//            autoLogin(memberID);
-//            return true;    // 인증 성공
-//        } else {
-//            log.warn("Login failed: incorrect password for memberID: {}", memberID);
-//            return false;   // 비밀번호가 틀림
-//        }
+    //end
     }
 
     // Redis 적용으로 추가함
     private void cacheUserAuth(String memberID, Authentication authToken) { // 변경된 메소드
         String authKey = AUTH_KEY_PREFIX + memberID;
-        redisTemplate.opsForValue().set(authKey, authToken, 30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(authKey, authToken, 60, TimeUnit.MINUTES);
     }
 
 }

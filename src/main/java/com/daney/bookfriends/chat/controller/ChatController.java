@@ -1,6 +1,6 @@
 package com.daney.bookfriends.chat.controller;
 
-import com.daney.bookfriends.Member.dto.MemberDto;
+import com.daney.bookfriends.member.dto.MemberDto;
 import com.daney.bookfriends.chat.dto.ChatDto;
 import com.daney.bookfriends.entity.Member;
 import com.daney.bookfriends.chat.service.ChatService;

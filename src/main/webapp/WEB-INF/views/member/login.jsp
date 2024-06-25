@@ -31,6 +31,9 @@
         </div>
         <button type="submit" id="loginBtn" class="btn btn-primary btn-block">로그인</button>
     </form>
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger mt-3">${error}</div>
+    </c:if>
     <div class="mt-3">
         <p>아직 계정이 없으신가요? <a href="${pageContext.request.contextPath}/member/join">회원가입하기</a></p>
     </div>

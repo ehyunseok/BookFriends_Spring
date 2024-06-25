@@ -1,9 +1,9 @@
-package com.daney.bookfriends.Member.controller;
+package com.daney.bookfriends.member.controller;
 
-import com.daney.bookfriends.Member.service.EmailService;
+import com.daney.bookfriends.member.service.EmailService;
 import com.daney.bookfriends.jwt.JwtService;
-import com.daney.bookfriends.Member.dto.MemberDto;
-import com.daney.bookfriends.Member.service.MemberService;
+import com.daney.bookfriends.member.dto.MemberDto;
+import com.daney.bookfriends.member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,36 +101,37 @@ public class MemberController {
 
 
 
-    // 로그인
+// 로그인
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", "아이디 또는 비밀번호가 틀렸습니다.");
+        }
         return "member/login";
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute MemberDto memberDto, Model model){
+    public String login(@ModelAttribute MemberDto memberDto, Model model) {
         log.info("Login attempt for memberID: {}", memberDto.getMemberID());
 
-        // memberID와 memberPassword가 제대로 전달 됐는지 확인하기
-        if(memberDto.getMemberID() == null || memberDto.getMemberID().isEmpty()){
+        if (memberDto.getMemberID() == null || memberDto.getMemberID().isEmpty()) {
             log.warn("Login failed: memberID is empty");
             model.addAttribute("error", "아이디를 입력해주세요.");
             return "member/login";
         }
-        if(memberDto.getMemberEmailChecked()==null || memberDto.getMemberPassword().isEmpty()){
-            log.warn("Login failed: memberEmail is empty");
+        if (memberDto.getMemberPassword() == null || memberDto.getMemberPassword().isEmpty()) {
+            log.warn("Login failed: memberPassword is empty");
             model.addAttribute("error", "비밀번호를 입력해주세요.");
             return "member/login";
         }
 
-        boolean loginSuccessful = memberService.login(memberDto.getMemberID(), memberDto.getMemberPassword());
-        if(loginSuccessful){
+        boolean loginSuccessful = memberService.login(memberDto.getMemberID(), memberDto.getMemberPassword(), model);
+        if (loginSuccessful) {
             log.info("Login successful for memberID: {}", memberDto.getMemberID());
-            return "redirect:/";    //로그인 성공 시 메인 페이지로 이동
+            return "redirect:/"; // 로그인 성공 시 메인 페이지로 이동
         } else {
             log.warn("Login failed for memberID: {}", memberDto.getMemberID());
-            model.addAttribute("error", "아이디 또는 비밀번호가 틀렸습니다.");
-            return "member/login";  // 로그인 실패 시 로그인 페이지로 돌아감
+            return "member/login"; // 로그인 실패 시 로그인 페이지로 돌아감
         }
     }
 

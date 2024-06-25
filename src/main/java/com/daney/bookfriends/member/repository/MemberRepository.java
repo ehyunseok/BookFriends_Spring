@@ -1,4 +1,4 @@
-package com.daney.bookfriends.Member.repository;
+package com.daney.bookfriends.member.repository;
 
 import com.daney.bookfriends.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.daney.bookfriends.Member.service;
+package com.daney.bookfriends.member.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
