@@ -1,33 +1,34 @@
 spring:
-  #application
+  # application
   application:
     name: bookfriends
-  #config
+  # config
   config:
     import: "classpath:api-key.yml"
-  #datasource
+  # datasource
   datasource:
-    url: jdbc:mysql://localhost:3306/bookfriends
+    url: jdbc:mysql://db:3306/bookfriends  # 컨테이너 이름 사용
     username: root
     password: mysql
     driver-class-name: com.mysql.cj.jdbc.Driver
-  #JPA
+  # JPA
   jpa:
     hibernate:
-      ddl-auto: validate
-      naming: #네이밍 전략을 수동으로 설정
+      ddl-auto: update
+      naming: # 네이밍 전략을 수동으로 설정
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect  # Dialect 설정 추가
         show_sql: true
         format_sql: true
     open-in-view: true
-  #mvc
+  # mvc
   mvc:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
-  #mail
+  # mail
   mail:
     host: smtp.gmail.com
     port: 587
@@ -39,41 +40,40 @@ spring:
           auth: true
           starttls:
             enable: true
-  #devtools
+  # devtools
   devtools:
     restart:
       enabled: true
       exclude: "**/com/daney/bookfriends/entity/**"
     livereload:
       enabled: true
-  #web
+  # web
   web:
     resources:
       static-locations: file:///C:/BookFriends/uploads/
-  #Redis
+  # Redis
   data:
     redis:
-      host: localhost   # Redis 서버의 호스트 주소
-      port: 6379        # Redis 서버의 포트
+      host: redis  # 컨테이너 이름 사용
+      port: 6379
       lettuce:          # Redis 클라이언트 라이브러리
         pool:           # Redis 연결을 관리하기 위한 연결 풀의 동작 방식을 정의한다.
-          max-active: 8 #동시에 사용할 수 있는 최대 연결 수를 지정(동시에 8개의 연결을 사용할 수 있다.)
-          max-idle: 8   #유휴 상태로 유지할 수 있는 최대 연결 수를 지정
-          min-idle: 0   #유휴 상태로 유지할 수 있는 최소 연결 수를 지정(필요하지 않으면 모든 연결을 닫을 수 있다.)
-  #cache
+          max-active: 8 # 동시에 사용할 수 있는 최대 연결 수를 지정(동시에 8개의 연결을 사용할 수 있다.)
+          max-idle: 8   # 유휴 상태로 유지할 수 있는 최대 연결 수를 지정
+          min-idle: 0   # 유휴 상태로 유지할 수 있는 최소 연결 수를 지정(필요하지 않으면 모든 연결을 닫을 수 있다.)
+  # cache
   cache:
     type: redis         # Spring cache가 redis를 캐시 저장소로 사용하도록 설정함
-
 
 # 로그
 logging:
   level:
-#    org.hibernate.SQL: debug
+    #    org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
     org.springframework.boot: DEBUG
     org.springframework: DEBUG
     com.daney.bookfriends: DEBUG
-    org.springframework.web.client.RestTemplate: DEBUG #국중 api 테스트를 위해 추가
+    org.springframework.web.client.RestTemplate: DEBUG # 국중 api 테스트를 위해 추가
     org.springframework.web: DEBUG
     org.apache.jasper: DEBUG
     org.apache.catalina: DEBUG
@@ -85,8 +85,8 @@ server:
     background-processor-delay: 10
   servlet:
     context-path: /bookfriends
-  port: 8001
+  port: ${SERVER_PORT:8001}
 
-#file 업로드 경로
+# file 업로드 경로
 file:
   upload-dir: c:/BookFriends/uploads

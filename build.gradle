@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.5'
+	//docker
+	id 'com.bmuschko.docker-java-application' version '9.3.0'
 }
 
 group = 'com.daney'
@@ -88,4 +90,15 @@ test {
 // 테스트를 위해 추가
 bootRun {
 	jvmArgs = ['-Djava.awt.headless=true', '-Dspring.profiles.active=dev']
+}
+
+//docker
+docker {
+	javaApplication {
+		baseImage = 'eclipse-temurin:21-jre'
+		maintainer = 'yhdaneys <yhdaneys@gmail.com>'
+		ports = [60083]
+		images = ["${project.group}/${project.name}:${project.version}"]
+		jvmArgs = ['-Xms512m', '-Xmx1024m']
+	}
 }
