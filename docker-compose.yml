@@ -2,7 +2,7 @@ version: '3.8'  # docker compose 파일의 버전을 지정함
 services:       # 애플리케이션을 구성하는 여러 컨테이너 서비스를 정의함
   db:
     image: mysql:8.0.37  # my sql 8.0.37 이미지를 사용
-    environment:     #mysql 설정을 위한 환경 변수를 정의함
+    environment:     # mysql 설정을 위한 환경 변수를 정의함
       MYSQL_ROOT_PASSWORD: mysql  # 루트 사용자 비밀번호를 설정함
       MYSQL_DATABASE: bookfriends # 생성할 데이터베이스 이름을 지정함
     ports:
@@ -18,12 +18,16 @@ services:       # 애플리케이션을 구성하는 여러 컨테이너 서비�
       - redis-data:/data  # `redis-data`볼륨을 `/data`에 매핑함
 
   app:
-    image: yhdaneys/bookfriends # 이전에 빌드한 애플리케이션 이미지를 사용함
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:   # db 및 redis 서비스가 먼저 실행되도록 설정함
       - db
       - redis
     ports:
-      - "60083:8001"  # 호스트의 60083 포트를 컨테이너의 8001 포트에 매핑함
+      - "61084:8001"  # 호스트의 61084 포트를 컨테이너의 8001 포트에 매핑함
+    volumes:
+      - ./uploads:/app/uploads  # 호스트의 업로드 디렉토리를 컨테이너의 업로드 디렉토리에 매핑
     environment:  # 스프링부트 애플리케이션의 환경 변수를 설정함
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/bookfriends # DB 연결 URL을 설정함
       SPRING_DATASOURCE_USERNAME: root   # DB 사용자 이름을 설정함
@@ -35,6 +39,7 @@ services:       # 애플리케이션을 구성하는 여러 컨테이너 서비�
 volumes:
   db-data:    # mysql 데이터베이스 데이터를 저장할 볼륨을 정의함
   redis-data: # redis 데이터를 저장할 볼륨을 정의함
+
 
 # Docker Compose를 사용하여 여러 Docker 컨테이너를 정의하고,
 # 이들을 하나의 애플리케이션으로 구성하기 위한 설정 파일이다.

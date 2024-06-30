@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.0'
 	id 'io.spring.dependency-management' version '1.1.5'
+	id 'war' // 추가: War 플러그인 추가
 	//docker
 	id 'com.bmuschko.docker-java-application' version '9.3.0'
 }
@@ -80,7 +81,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-cache:3.3.0'
 	// actuator - 성능 측정을 위해 추가
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
 }
 
 test {
@@ -92,12 +92,27 @@ bootRun {
 	jvmArgs = ['-Djava.awt.headless=true', '-Dspring.profiles.active=dev']
 }
 
+// JSP 파일을 JAR 파일에 포함시키기 위한 설정
+bootJar {
+	enabled = false
+}
+
+bootWar {
+	enabled = true
+}
+
+processResources {
+	from("src/main/webapp") {
+		into("static")
+	}
+}
+
 //docker
 docker {
 	javaApplication {
 		baseImage = 'eclipse-temurin:21-jre'
 		maintainer = 'yhdaneys <yhdaneys@gmail.com>'
-		ports = [60083]
+		ports = [8001]
 		images = ["${project.group}/${project.name}:${project.version}"]
 		jvmArgs = ['-Xms512m', '-Xmx1024m']
 	}
