@@ -26,8 +26,6 @@ services:       # 애플리케이션을 구성하는 여러 컨테이너 서비�
       - redis
     ports:
       - "61084:8001"  # 호스트의 61084 포트를 컨테이너의 8001 포트에 매핑함
-    volumes:
-      - ./uploads:/app/uploads  # 호스트의 업로드 디렉토리를 컨테이너의 업로드 디렉토리에 매핑
     environment:  # 스프링부트 애플리케이션의 환경 변수를 설정함
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/bookfriends # DB 연결 URL을 설정함
       SPRING_DATASOURCE_USERNAME: root   # DB 사용자 이름을 설정함
@@ -35,6 +33,9 @@ services:       # 애플리케이션을 구성하는 여러 컨테이너 서비�
       SPRING_REDIS_HOST: redis           # Redis 호스트를 설정함
       SPRING_REDIS_PORT: 6379            # redis 포트를 설정함
       SERVER_PORT: 8001                  # 스프링부트 애플리케이션이 사용할 포트를 설정함
+      FILE_UPLOAD_DIR: /BookFriends/uploads  # 환경 변수 추가
+    volumes:
+        - ./uploads:/BookFriends/uploads  # 호스트 디렉토리를 컨테이너로 마운트
 
 volumes:
   db-data:    # mysql 데이터베이스 데이터를 저장할 볼륨을 정의함

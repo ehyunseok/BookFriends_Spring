@@ -1,18 +1,19 @@
 FROM eclipse-temurin:21-jre
-
-# Build argument for the WAR file location
 ARG WAR_FILE=build/libs/*.war
+COPY ${WAR_FILE} app.war
 
-# Copy the WAR file to the container
-COPY ${WAR_FILE} /app.war
+# JSP files need to be available in the exploded WAR structure
+COPY src/main/webapp/WEB-INF/views /WEB-INF/views
 
-# Copy JSP files to the proper location
-COPY src/main/webapp/WEB-INF/views /app/WEB-INF/views
+# Create upload directory
+RUN mkdir -p /BookFriends/uploads
 
-# Expose the port the app runs on
+# Set the environment variable for the upload directory
+ENV UPLOAD_DIR=/BookFriends/uploads
+
+# Expose the port
 EXPOSE 8001
 
-# Entry point to run the application
 ENTRYPOINT ["java", "-jar", "/app.war"]
 
 # dockerfile:  애플리케이션의 Docker 이미지를 생성하기 위한 설정 파일

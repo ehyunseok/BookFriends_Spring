@@ -72,28 +72,34 @@ public class RecruitController {
     public ResponseEntity<Map<String, String>> uploadImage(@RequestParam("uploadFile") MultipartFile uploadFile) {
         log.debug("Upload Image Endpoint Hit");
 
-        File uploadDirPath  = new File(uploadDir);
+        // 업로드 디렉토리 경로를 객체로 생성
+        File uploadDirPath = new File(uploadDir);
+        if (!uploadDirPath.exists()) {
+            boolean created = uploadDirPath.mkdirs();  // 디렉토리가 없으면 생성
+            log.debug("Created upload directory: {}", created);
+        }
+
         log.debug("Upload Directory: {}", uploadDir);
 
-
-        // 파일이름을 생성(현재 시간을 기준으로 고유한 파일 생성)
+        // 파일 이름을 생성
         String fileName = System.currentTimeMillis() + "_" + uploadFile.getOriginalFilename();
-        File file = new File(uploadDirPath + File.separator + fileName);
+        File file = new File(uploadDirPath, fileName);
         log.debug("Generated File Name: {}", fileName);
 
         try {
-            // 디렉토리에 파일을 저장함
+            // 디렉토리에 파일을 저장
             uploadFile.transferTo(file);
             log.debug("File uploaded successfully to {}", file.getAbsolutePath());
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("Error uploading file", e);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);  // 파일 저장 중 오류 발생 시 http 500 코드 반환
         }
 
-        Map<String, String> result = new HashMap<>();   // 결과를 담을 맵 생성
-        result.put("fileName", fileName);   //맵에 파일 이름 추가
-        return ResponseEntity.ok(result);   //맵을 JSON 객체로 파일 이름을 반환함
+        Map<String, String> result = new HashMap<>();
+        result.put("fileName", fileName);  // 맵에 파일 이름 추가
+        return ResponseEntity.ok(result);  // 맵을 JSON 객체로 반환
     }
+
 
     //모집글 상세페이지
     @GetMapping("/post/{recruitID}")
