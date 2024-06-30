@@ -3,6 +3,7 @@
 ## 목차
 - [소개](#소개)
 - [개발 환경](#개발-환경)
+- [시스템구조](#시스템-구조조)
 - [주요 기능](#주요-기능)
 - [실행 화면](#실행-화면)
 - [ERD](#ERD)
@@ -58,6 +59,10 @@ Book Friends 프로젝트는 다음과 같은 계층 구조를 따릅니다:
 - **Frontend**: JSP, JavaScript, CSS
 - **Database**: MySQL
 - **Build Tool**: Gradle
+
+## 시스템 구조
+![architecture](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/36530e82-504f-4480-b393-27f47b2675f3)
+
 
 ## 주요 기능
 1. **회원 관리**
