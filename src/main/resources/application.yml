@@ -28,6 +28,7 @@ spring:
     view:
       prefix: /WEB-INF/views/
       suffix: .jsp
+    static-path-pattern: /uploads/**
   # mail
   mail:
     host: smtp.gmail.com
@@ -50,7 +51,7 @@ spring:
   # web
   web:
     resources:
-      static-locations: file:///C:/BookFriends/uploads/
+      static-locations: file:/BookFriends/uploads/
   # Redis
   data:
     redis:
@@ -64,7 +65,9 @@ spring:
   # cache
   cache:
     type: redis         # Spring cache가 redis를 캐시 저장소로 사용하도록 설정함
-
+  #jackson- 시간을 서울로 변경
+  jackson:
+    time-zone: Asia/Seoul
 # 로그
 logging:
   level:
@@ -89,4 +92,4 @@ server:
 
 # file 업로드 경로
 file:
-  upload-dir: c:/BookFriends/uploads
+  upload-dir: /BookFriends/uploads

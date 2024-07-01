@@ -14,7 +14,7 @@ ENV UPLOAD_DIR=/BookFriends/uploads
 # Expose the port
 EXPOSE 8001
 
-ENTRYPOINT ["java", "-jar", "/app.war"]
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-jar", "/app.war"]
 
 # dockerfile:  애플리케이션의 Docker 이미지를 생성하기 위한 설정 파일
 # 일련의 명령어를 통해 애플리케이션 환경을 설정하고, 필요한 파일을 추가하며, 실행할 명령을 정의한다.

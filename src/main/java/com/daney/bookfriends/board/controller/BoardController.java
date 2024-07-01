@@ -84,7 +84,7 @@ public class BoardController {
         // 업로드 디렉토리 경로를 객체로 생성
         File uploadDirPath = new File(uploadDir);
         if (!uploadDirPath.exists()) {
-            boolean created = uploadDirPath.mkdirs();  // 디렉토리가 없으면 생성
+            boolean created = uploadDirPath.mkdirs();
             log.debug("Created upload directory: {}", created);
         }
 
@@ -94,6 +94,7 @@ public class BoardController {
         String fileName = System.currentTimeMillis() + "_" + uploadFile.getOriginalFilename();
         File file = new File(uploadDirPath, fileName);
         log.debug("Generated File Name: {}", fileName);
+
 
         try {
             // 디렉토리에 파일을 저장
@@ -105,7 +106,7 @@ public class BoardController {
         }
 
         Map<String, String> result = new HashMap<>();
-        result.put("fileName", fileName);  // 맵에 파일 이름 추가
+        result.put("fileName", "/uploads/"+ fileName);  // 맵에 파일 이름 추가
         return ResponseEntity.ok(result);  // 맵을 JSON 객체로 반환
     }
 

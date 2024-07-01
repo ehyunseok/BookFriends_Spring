@@ -5,13 +5,17 @@ services:       # 애플리케이션을 구성하는 여러 컨테이너 서비�
     environment:     # mysql 설정을 위한 환경 변수를 정의함
       MYSQL_ROOT_PASSWORD: mysql  # 루트 사용자 비밀번호를 설정함
       MYSQL_DATABASE: bookfriends # 생성할 데이터베이스 이름을 지정함
+      TZ: Asia/Seoul  # 시간대 설정(서울)
     ports:
       - "3307:3306"  # 호스트와 컨테이너 간의 포트를 매핑함. 호스트의 3307 포트를 컨테이너의 3306 포트에 매핑함
     volumes:  # 데이터베이스 데이터를 유지하기 위해 볼륨을 사용함.
       - db-data:/var/lib/mysql  # `db-data` 볼륨을 `/var/lib/mysql`에 매핑함
+      - ./mysql/my.cnf:/etc/mysql/my.cnf  # 설정 파일 마운트
 
   redis:
     image: redis:6.2  # redis 6.2 이미지를 사용함
+    environment:
+      TZ: Asia/Seoul  # 시간대 설정
     ports:
       - "6379:6379"   # 호스트의 6379 포트를 컨테이너의 6379 포트에 매핑함
     volumes:              # 레디스 데이터를 유지하기 위해 볼륨을 사용함
@@ -36,6 +40,7 @@ services:       # 애플리케이션을 구성하는 여러 컨테이너 서비�
       FILE_UPLOAD_DIR: /BookFriends/uploads  # 환경 변수 추가
     volumes:
         - ./uploads:/BookFriends/uploads  # 호스트 디렉토리를 컨테이너로 마운트
+    command: ["java", "-Duser.timezone=Asia/Seoul", "-jar", "/app.war"]
 
 volumes:
   db-data:    # mysql 데이터베이스 데이터를 저장할 볼륨을 정의함

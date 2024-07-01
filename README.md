@@ -346,4 +346,6 @@ https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/efb839db-2d6d-4
     - 프로젝트의 도커 이미지 자동 빌드 및 배포 워크플로우 설정 시작
 - 2024.06.30
   - 도커를 사용한 Springboot JSP 파일 로딩 문제 해결
-  - 
+- 2024.07.01
+  - 시간을 서울 시간으로 변경함
+  - 이미지 파일 업로드 문제 해결중
