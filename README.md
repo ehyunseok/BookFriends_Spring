@@ -61,7 +61,7 @@ Book Friends 프로젝트는 다음과 같은 계층 구조를 따릅니다:
 - **Build Tool**: Gradle
 
 ## 시스템 구조
-![architecture](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/36530e82-504f-4480-b393-27f47b2675f3)
+![architecture](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/66a1dc0d-bae3-4735-b4ad-ca5cfccccc9d)
 
 
 ## 주요 기능
