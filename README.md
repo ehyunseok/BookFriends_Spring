@@ -3,7 +3,7 @@
 ## 목차
 - [소개](#소개)
 - [개발 환경](#개발-환경)
-- [시스템구조](#시스템-구조조)
+- [시스템 구조(System Architecture)](#시스템-구조)
 - [주요 기능](#주요-기능)
 - [실행 화면](#실행-화면)
 - [ERD](#ERD)
@@ -61,7 +61,9 @@ Book Friends 프로젝트는 다음과 같은 계층 구조를 따릅니다:
 - **Build Tool**: Gradle
 
 ## 시스템 구조
-![architecture](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/36530e82-504f-4480-b393-27f47b2675f3)
+### System Architecture
+![architecture](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/9a11d805-25b3-4dd0-9457-b5e6d3c3adb0)
+
 
 
 ## 주요 기능
@@ -281,6 +283,32 @@ https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/efb839db-2d6d-4
 - **결과**
   Docker와 Spring Boot 설정을 수정하여 JSP 파일을 올바르게 로드할 수 있었다. 위의 설정을 통해 Docker 컨테이너 내에서 JSP 파일을 포함한 Spring Boot 애플리케이션을 성공적으로 실행할 수 있다.
 
+### 5. AWS EC2 프리티어 메모리 부족 현상
+- **문제**:AWS EC2 프리티어로 제공하는 인스턴스 유형인 `t2.micro`의 RAM이 약1GB에 불과하다. 그렇기에 gradle 빌드 작업 시, 서버가 멈추는 현상이 발생하였다.
+- **해결방법**
+  - **RAM 증설**
+    : 리눅스에서는 SWAP 메모리를 지정할 수 있다.(SWAP메모리란?-RAM이 부족할 경우, HDD의 일정 공간을 마치 RAM처럼 사용하는 것)
+    - dd 명령어를 통해 SWAP 메모리 할당
+      ```sudo dd if=/dev/zero of=/swapfile bs=128M count=16```
+      - 128mb씩 16개의 공간을 만듦(약 2GB)
+    - SWAP 파일에 대한 읽기 및 쓰기 권한 업데이트
+      ```$ sudo chmod 600 /swapfile```
+    - Linux SWAP 영역을 설정
+      ```$ sudo mkswap /swapfile```
+    - SWAP 공간에 SWAP 파일을 추가하여 SWAP 파일을 즉시 사용할 수 있도록 만듦
+      ```$ sudo swapon /swapfile```
+    - /etc/fstab 파일을 편집하여 부팅 시 SWAP 파일을 활성화함
+      - 편집기에서 파일 열기
+        ```$ sudo vi /etc/fstab```
+      - 파일 끝에 다음 내용 추가한 뒤 저장 및 종료
+        ```/swapfile swap swap defaults 0 0```
+- **결과**
+  ![image](https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/c653b685-191f-4954-8f77-1b30bc014a7e)
+  CPU 사용률이 증설 이전에는 99.9퍼센트였으나, 증설 이후 확연히 준 것을 확인할 수 있다.
+- **참고**: [얇고 넓은 개발 블로그-](https://sundries-in-myidea.tistory.com/102)
+  
+
+
 ## 업데이트 로그
 - 2024.06.04.
   - 프로젝트 시작
@@ -346,4 +374,5 @@ https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/efb839db-2d6d-4
     - 프로젝트의 도커 이미지 자동 빌드 및 배포 워크플로우 설정 시작
 - 2024.06.30
   - 도커를 사용한 Springboot JSP 파일 로딩 문제 해결
-  - 
+- 2024.07.06
+  - 배포 시작
