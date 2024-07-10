@@ -265,7 +265,7 @@ https://github.com/ehyunseok/BookFriends_Spring/assets/121013391/efb839db-2d6d-4
   메소드 누락 문제를 해결하여 채팅 내역이 정상 전송  처리
   실시간 채팅 기능 안정화 및 사용자 경험 개선
 
-### 3. Docker를 사용한 Spring Boot 애플리케이션에서 JSP 파일 로딩 문제 해결
+### 4. Docker를 사용한 Spring Boot 애플리케이션에서 JSP 파일 로딩 문제 해결
 - **문제**:Docker 컨테이너 내에서 Spring Boot 애플리케이션을 실행할 때, JSP 파일을 로드하지 못해 HTTP 404 오류가 발생. 이는 컨테이너 내부의 경로 설정 문제로 인해 발생한 것.
 
 - **해결 방법**
